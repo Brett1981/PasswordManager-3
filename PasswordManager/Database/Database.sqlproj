@@ -6,7 +6,7 @@
     <Name>Database</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
-    <ProjectGuid>{6f942115-0bdd-4235-b0c4-f1009cc412a6}</ProjectGuid>
+    <ProjectGuid>{68c3b70d-da15-49d3-bfc6-c46dbd1e01ae}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
@@ -60,6 +60,6 @@
     <Folder Include="dbo\Tables\" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="dbo\Tables\Account_1.sql" />
+    <Build Include="dbo\Tables\Account.sql" />
   </ItemGroup>
 </Project>
