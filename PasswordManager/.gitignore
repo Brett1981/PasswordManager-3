@@ -65,6 +65,6 @@ WebApplication/msbuild.err
 WebApplication/msbuild.wrn
 
 # Visual Studio 2015
+.vs/
 Database/.vs/
-
 WebApplication/.vs/
