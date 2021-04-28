@@ -16,5 +16,11 @@ namespace WebApplication.DataAccess
             var result = _context.Accounts.Where(x => x.Id == id).ToList();
             return _mapper.Map<List<Dbo.Account>>(result);
         }
+
+        public List<Dbo.Account> GetAll()
+        {
+            var result = _context.Accounts.ToList();
+            return _mapper.Map<List<Dbo.Account>>(result);
+        }
     }
 }

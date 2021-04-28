@@ -12,15 +12,27 @@ namespace WebApplication.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly DataAccess.Interfaces.IAccountsRepository _accountsRepository;
+        IndexViewModel indexViewModel;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, DataAccess.Interfaces.IAccountsRepository accountsRepository)
         {
             _logger = logger;
+            _accountsRepository = accountsRepository;
+            indexViewModel = new IndexViewModel(_accountsRepository);
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            indexViewModel.GetAll();
+            return View(indexViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Index(string name, string login, string password)
+        {
+            indexViewModel.AddAccount(name, login, password);
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult Privacy()

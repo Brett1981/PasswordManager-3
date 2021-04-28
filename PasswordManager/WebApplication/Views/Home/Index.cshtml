@@ -1,11 +1,19 @@
-﻿@page
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@model WebApplication.Views.Home.IndexModel
-
+﻿@model IndexViewModel
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    @foreach (var item in Model.Accounts)
+    <h1 class="display-4">Password Manager</h1>
+    <div class="text-center">
+        @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+        {
+            <form method="post">
+                @Html.TextBoxFor(m => m.name)
+                @Html.TextBoxFor(m => m.login)
+                @Html.TextBoxFor(m => m.password)
+                <input type="submit" value="Add account">
+            </form>
+        }
+    </div>
+    @foreach (var item in @Model.Accounts)
     {
         <tr>
             <td>

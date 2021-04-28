@@ -8,5 +8,6 @@ namespace WebApplication.DataAccess.Interfaces
     public interface IAccountsRepository : IRepository<Account, Dbo.Account>
     {
         public List<Dbo.Account> GetById(int id);
+        public List<Dbo.Account> GetAll();
     }
 }

@@ -31,15 +31,16 @@ namespace WebApplication
 
             services.AddAutoMapper(typeof(DataAccess.AutomapperProfiles));
             services.AddRazorPages();
-            services.AddControllers();
+            //services.AddControllers();
             services.AddTransient<DataAccess.Interfaces.IAccountsRepository, DataAccess.AccountRepository>();
-            //services.AddControllersWithViews();
+            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             _connectionString = Configuration.GetConnectionString("PasswordManager");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
