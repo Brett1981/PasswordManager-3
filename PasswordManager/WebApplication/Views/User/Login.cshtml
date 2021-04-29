@@ -1,0 +1,39 @@
+﻿@model UserViewModel
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<div class="login-page">
+    <h1>Log in</h1>
+    @using (Html.BeginForm("Login", "User", FormMethod.Post))
+    {
+        <table>
+            <tr>
+                <td>@Html.LabelFor(a => a.login)</td>
+                <td>@Html.TextBoxFor(a => a.login)</td>
+                <td>@Html.ValidationMessageFor(a => a.login)</td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(a => a.password)
+                </td>
+                <td>
+                    @Html.PasswordFor(a => a.password)
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(a => a.password)
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="submit" value="Login" />
+                </td>
+                <td></td>
+            </tr>
+        </table>
+    }
+    @Html.ActionLink("Sign Up", "Register", "User") 
+
+</div>

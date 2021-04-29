@@ -1,0 +1,44 @@
+﻿@model UserViewModel
+
+<div>
+    <h1>Register</h1>
+    @using (Html.BeginForm("Login", "User", FormMethod.Post))
+    {
+<table>
+    <tr>
+        <td>@Html.LabelFor(a => a.login)</td>
+        <td>@Html.TextBoxFor(a => a.login)</td>
+        <td>@Html.ValidationMessageFor(a => a.login)</td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(a => a.password)
+        </td>
+        <td>
+            @Html.PasswordFor(a => a.password)
+        </td>
+        <td>
+            @Html.ValidationMessageFor(a => a.password)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @Html.LabelFor(a => a.confirmpassword)
+        </td>
+        <td>
+            @Html.PasswordFor(a => a.confirmpassword)
+        </td>
+        <td>
+            @Html.ValidationMessageFor(a => a.confirmpassword)
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <input type="submit" value="Register" />
+        </td>
+        <td></td>
+    </tr>
+</table>
+    }
+</div>

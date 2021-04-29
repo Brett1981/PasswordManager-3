@@ -31,9 +31,11 @@ namespace WebApplication
 
             services.AddAutoMapper(typeof(DataAccess.AutomapperProfiles));
             services.AddRazorPages();
-            //services.AddControllers();
+            services.AddControllers();
             services.AddTransient<DataAccess.Interfaces.IAccountsRepository, DataAccess.AccountRepository>();
             services.AddControllersWithViews();
+            services.AddMvc(options => options.EnableEndpointRouting = false);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,15 +59,38 @@ namespace WebApplication
             app.UseRouting();
 
             app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
+            app.UseMvc(routes =>
             {
-                endpoints.MapRazorPages();
+                routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRoute(
+             name: "route2",
+             template: "statics",
+             defaults: new { controller = "User", action = "Login" }
 
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            );
+
+                routes.MapRoute(
+                   name: "route3",
+                   template: "statics/SYears",
+                   defaults: new { controller = "SYears", action = "Index" }
+                );
+                //routes.MapRoute(
+                //    name: "default",
+                //    template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapRazorPages();
+
+            //    endpoints.MapControllerRoute(name: "user",
+            //    pattern: "User/Login",
+            //    defaults: new { controller = "User", action = "Login" });
+
+            //    endpoints.MapControllerRoute(
+            //        name: "default",
+            //        pattern: "{controller=User}/{action=Login}/{id?}");
+            //});
         }
     }
 }

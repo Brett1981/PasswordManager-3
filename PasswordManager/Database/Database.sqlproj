@@ -61,5 +61,8 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Account.sql" />
+    <Build Include="dbo\Tables\User.sql" />
+    <Build Include="dbo\Tables\Category.sql" />
+    <Build Include="dbo\Tables\Bank.sql" />
   </ItemGroup>
 </Project>

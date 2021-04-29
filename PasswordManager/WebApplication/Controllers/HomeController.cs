@@ -24,8 +24,9 @@ namespace WebApplication.Controllers
 
         public async Task<IActionResult> Index()
         {
-            indexViewModel.GetAll();
-            return View(indexViewModel);
+            //indexViewModel.GetAll();
+            //return View(indexViewModel);
+            return RedirectToAction("Login","User");
         }
 
         [HttpPost]
