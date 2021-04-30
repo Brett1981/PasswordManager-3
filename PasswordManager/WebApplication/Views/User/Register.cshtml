@@ -2,9 +2,14 @@
 
 <div>
     <h1>Register</h1>
-    @using (Html.BeginForm("Login", "User", FormMethod.Post))
+    @using (Html.BeginForm("Register", "User", FormMethod.Post))
     {
 <table>
+    <tr>
+        <td>@Html.LabelFor(a => a.email)</td>
+        <td>@Html.TextBoxFor(a => a.email)</td>
+        <td>@Html.ValidationMessageFor(a => a.email)</td>
+    </tr>
     <tr>
         <td>@Html.LabelFor(a => a.login)</td>
         <td>@Html.TextBoxFor(a => a.login)</td>

@@ -18,13 +18,16 @@ namespace WebApplication.DataAccess
         }
 
         public virtual DbSet<Account> Accounts { get; set; }
+        public virtual DbSet<Bank> Banks { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=passwordmanager.database.windows.net;Initial Catalog=PasswordManager;User ID=AKAK;Password=DotnetParty1!;Trusted_Connection=False;Encrypt=True");
+                optionsBuilder.UseSqlServer("Data Source=passwordmanager.database.windows.net;Initial Catalog=PasswordManager;User ID=AKAK;Password=DotnetParty1!;Trusted_Connection=False;Encrypt=True;");
             }
         }
 
@@ -38,6 +41,10 @@ namespace WebApplication.DataAccess
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
+                entity.Property(e => e.CategoryId)
+                    .HasMaxLength(50)
+                    .HasColumnName("categoryId");
+
                 entity.Property(e => e.Login)
                     .HasMaxLength(50)
                     .HasColumnName("login");
@@ -49,6 +56,76 @@ namespace WebApplication.DataAccess
                 entity.Property(e => e.Password)
                     .HasMaxLength(50)
                     .HasColumnName("password");
+
+                entity.Property(e => e.SessionId)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("sessionId");
+
+                entity.Property(e => e.Url)
+                    .HasMaxLength(50)
+                    .HasColumnName("url");
+            });
+
+            modelBuilder.Entity<Bank>(entity =>
+            {
+                entity.ToTable("Bank");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Cvc)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("cvc");
+
+                entity.Property(e => e.Date)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("date");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("name");
+
+                entity.Property(e => e.NumberCard)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("numberCard");
+            });
+
+            modelBuilder.Entity<Category>(entity =>
+            {
+                entity.ToTable("Category");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .HasColumnName("name");
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.ToTable("User");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Email)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("email");
+
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false)
+                    .HasColumnName("password");
+
+                entity.Property(e => e.Username)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnName("username");
             });
 
             OnModelCreatingPartial(modelBuilder);

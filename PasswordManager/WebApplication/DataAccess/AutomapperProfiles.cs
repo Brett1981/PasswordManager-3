@@ -12,6 +12,9 @@ namespace WebApplication.DataAccess
         {
             CreateMap<Dbo.Account, Account>();
             CreateMap<Account, Dbo.Account>();
+
+            CreateMap<Dbo.User, User>();
+            CreateMap<User, Dbo.User>();
         }
     }
 }

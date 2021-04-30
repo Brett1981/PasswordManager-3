@@ -33,6 +33,7 @@ namespace WebApplication
             services.AddRazorPages();
             services.AddControllers();
             services.AddTransient<DataAccess.Interfaces.IAccountsRepository, DataAccess.AccountRepository>();
+            services.AddTransient<DataAccess.Interfaces.IUserRepository, DataAccess.UserRepository>();
             services.AddControllersWithViews();
             services.AddMvc(options => options.EnableEndpointRouting = false);
 

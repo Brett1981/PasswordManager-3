@@ -10,6 +10,7 @@ namespace WebApplication.Models
 
     public class UserViewModel
     {
+        public string email { get; set; }
         [Required(ErrorMessage = "Please enter student name.")]
         public string login { get; set; }
         [Required]
