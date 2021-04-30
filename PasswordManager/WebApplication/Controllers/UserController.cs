@@ -15,6 +15,7 @@ namespace WebApplication.Controllers
     {
         private readonly DataAccess.Interfaces.IUserRepository _userRepository;
         UserViewModel userViewModel;
+
         public UserController(DataAccess.Interfaces.IUserRepository userRepository)
         {
             userViewModel = new UserViewModel();
@@ -24,15 +25,26 @@ namespace WebApplication.Controllers
         //[Route("User/Login")]
         public IActionResult Login()
         {
+            var name = HttpContext.Session.GetString("Username");
+            if (name!= null)
+                return RedirectToAction("Privacy", "Home");
             return View();
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Login(string login, string password)
         {
             var userExist = _userRepository.GetUser(login, password);
-            if (userExist)
+            if (userExist != null)
+            {
+                HttpContext.Session.SetInt32("SessionId", userExist.Id);
+
+                HttpContext.Session.SetString("Username", userExist.Username);
+                
+                Console.WriteLine(HttpContext.Session.GetString("SessionUsername"));
                 return RedirectToAction("Privacy", "Home");
+            }
             return View();
         }
 

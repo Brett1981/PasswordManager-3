@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,11 @@ namespace WebApplication.Controllers
         {
             //indexViewModel.GetAll();
             //return View(indexViewModel);
+            var session = HttpContext.Session.GetString("Name");
+            if ( session != null)
+            {
+                return RedirectToAction("Privacy", "Home");
+            }
             return RedirectToAction("Login","User");
         }
 
@@ -38,6 +44,7 @@ namespace WebApplication.Controllers
 
         public IActionResult Privacy()
         {
+
             return View();
         }
 

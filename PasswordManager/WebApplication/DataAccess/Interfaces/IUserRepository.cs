@@ -8,6 +8,6 @@ namespace WebApplication.DataAccess.Interfaces
     public interface IUserRepository : IRepository<User,Dbo.User>
     {
         public string GetEmail(string email);
-        public bool GetUser(string login, string password);
+        public User GetUser(string login, string password);
     }
 }

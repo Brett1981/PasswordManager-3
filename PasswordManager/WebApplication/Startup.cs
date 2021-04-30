@@ -28,6 +28,16 @@ namespace WebApplication
         {
             services.AddEntityFrameworkSqlServer()
                         .AddDbContext<DataAccess.PasswordManagerContext>(options => options.UseSqlServer(_connectionString));
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = "PasswordManager.Session";
+                options.Cookie.HttpOnly = true;
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.IsEssential = true;
+            });
+            services.AddHttpContextAccessor();
 
             services.AddAutoMapper(typeof(DataAccess.AutomapperProfiles));
             services.AddRazorPages();
@@ -60,6 +70,8 @@ namespace WebApplication
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");

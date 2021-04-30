@@ -20,16 +20,17 @@ namespace WebApplication.DataAccess
                 return null;
             return result.Email;
         }
-        public bool GetUser(string login,string password)
+        public User GetUser(string login,string password)
         {
             var user = _context.Users.Where(x => x.Username == login).FirstOrDefault();
             if (user == null)
-                return false;
+                return null;
             bool verified = BCrypt.Net.BCrypt.Verify(password, user.Password);
             if (!verified)
-                return false;
-            return true;
+                return null;
+            return user;
         }
+
 
     }
 }
