@@ -67,9 +67,44 @@ namespace WebApplication.Controllers
             return RedirectToAction("Accounts", "Account");
         }
 
-        [HttpDelete]
-        public async Task<ActionResult> Delete(AccountViewModel accountViewModel)
+        [HttpPut]
+        public async Task<ActionResult> Update(AccountViewModel accountViewModel)
         {
+            var account = _accountRepository.GetById(accountViewModel.Id);
+            account.Name = accountViewModel.Name;
+            account.Login = accountViewModel.Login;
+            account.Password = accountViewModel.Password;
+            account.Url = accountViewModel.Url;
+            account.Name = accountViewModel.Name;
+
+            account.SessionId = 17;
+
+            if (!String.IsNullOrEmpty(accountViewModel.Category))
+            {
+                var categoryId = _categoryRepository.GetByName(accountViewModel.Category);
+                if (categoryId != null) // Category already exists
+                    account.CategoryId = categoryId;
+                else // Category does not exist
+                {
+                    var newCategory = new Dbo.Category();
+                    newCategory.Name = accountViewModel.Category;
+
+                    await _categoryRepository.Insert(newCategory);
+
+                    account.CategoryId = _categoryRepository.GetByName(accountViewModel.Category);
+                }
+            }
+
+            await _accountRepository.Update(account);
+
+            return RedirectToAction("Accounts", "Account");
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> Delete(int id)
+        {
+            await _accountRepository.Delete(id);
+
             return RedirectToAction("Accounts", "Account");
         }
     }

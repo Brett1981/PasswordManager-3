@@ -11,10 +11,10 @@ namespace WebApplication.DataAccess
         {
         }
 
-        public List<Dbo.Account> GetById(int id)
+        public Dbo.Account GetById(int id)
         {
-            var result = _context.Accounts.Where(x => x.Id == id).ToList();
-            return _mapper.Map<List<Dbo.Account>>(result);
+            var result = _context.Accounts.Where(x => x.Id == id).FirstOrDefault();
+            return _mapper.Map<Dbo.Account>(result);
         }
 
         public List<Dbo.Account> GetBySessionId(int sessionId)

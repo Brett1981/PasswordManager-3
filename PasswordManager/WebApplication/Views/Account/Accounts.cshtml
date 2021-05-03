@@ -7,22 +7,21 @@
 }
 
 <script>
-    function deleteAccount() {
-        if (confirm("Are you sure to delete this account?")) {
-            var tr = $(this).parents('tr:first');
-            console.log(tr);
-            var ID = $(this).prop('id');
-            console.log();
-            //Deletes the record with ID sent below  
-            $.post(
-                '/Accounts/Delete/',
-                { ID: ID },
-                function (item) {
-                    tr.remove();
-                }, "json");
-            location.reload();
+    function deleteAccount(itemId) {
+        if (confirm("Are you sure you want to delete this account?"))
+        {
+            $.ajax({
+                type: 'DELETE',
+                url: '@(Url.Action("Delete", "Account"))',
+                data: { 'id': itemId },
+                cache: false,
+                success: function (result) {
+                    console.log(result);
+                    window.location.href = '@(Url.Action("Accounts", "Account"))';
+                },
+            });
         }
-    });  
+    }
 </script>
 
 <div>
@@ -30,7 +29,7 @@
     <div>
         @foreach (var category in categories)
         {
-            <table class="table table-hover table-primary">
+            <table class="table table-hover">
                 <tr>
                     <th colspan="5">@category.Name</th>
                 </tr>
@@ -45,17 +44,19 @@
                             <td>@account.Url</td>
                             <td>
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-xl">Edit</button>
-                                <button type="button" class="btn btn-primary" onclick="deleteAccount()">Delete</button>
+                                <button type="button" class="btn btn-primary" onclick="deleteAccount(@account.Id)">Delete</button>
                             </td>
                         </tr>
                     }
                 }
-                <td colspan="5">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-xl">Add</button>
-                </td>
+                <tr>
+                    <td colspan="5">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-xl">Add</button>
+                    </td>
+                </tr>
             </table>
         }
-        <table class="table table-hover table-primary">
+        <table class="table table-hover">
             <tr>
                 <th colspan="5">All elements</th>
             </tr>
@@ -68,7 +69,7 @@
                     <td>@account.Url</td>
                     <td>
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-xl">Edit</button>
-                        <button type="button" class="btn btn-primary" onclick="deleteAccount()">Delete</button>
+                        <button type="button" class="btn btn-primary" onclick="deleteAccount(@account.Id)">Delete</button>
                     </td>
                 </tr>
             }
