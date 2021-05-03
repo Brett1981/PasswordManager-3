@@ -7,35 +7,76 @@
 }
 
 <script>
-    function showModal() {
-        $("#loginModal").modal('show');
-    }
+    function deleteAccount() {
+        if (confirm("Are you sure to delete this account?")) {
+            var tr = $(this).parents('tr:first');
+            console.log(tr);
+            var ID = $(this).prop('id');
+            console.log();
+            //Deletes the record with ID sent below  
+            $.post(
+                '/Accounts/Delete/',
+                { ID: ID },
+                function (item) {
+                    tr.remove();
+                }, "json");
+            location.reload();
+        }
+    });  
 </script>
 
 <div>
     <h1 class="display-4">Accounts</h1>
     <div>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-xl">Add</button>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-xl">Edit</button>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="deleteModal">Delete</button>
-    </div>
-    <div>
-        <table class="table table-bordered table-hover" id="tblEmployee">
+        @foreach (var category in categories)
+        {
+            <table class="table table-hover table-primary">
+                <tr>
+                    <th colspan="5">@category.Name</th>
+                </tr>
+                @foreach (var account in accounts)
+                {
+                    @if (account.CategoryId == category.Id)
+                    {
+                        <tr>
+                            <td>@account.Name</td>
+                            <td>@account.Login</td>
+                            <td>@account.Password</td>
+                            <td>@account.Url</td>
+                            <td>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-xl">Edit</button>
+                                <button type="button" class="btn btn-primary" onclick="deleteAccount()">Delete</button>
+                            </td>
+                        </tr>
+                    }
+                }
+                <td colspan="5">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-xl">Add</button>
+                </td>
+            </table>
+        }
+        <table class="table table-hover table-primary">
             <tr>
-                <th>Name</th>
-                <th>Login</th>
-                <th>Password</th>
-                <th>Url</th>
+                <th colspan="5">All elements</th>
             </tr>
-            @foreach (var item in accounts)
+            @foreach (var account in accounts)
             {
                 <tr>
-                    <td>@item.Name</td>
-                    <td>@item.Login</td>
-                    <td>@item.Password</td>
-                    <td>@item.Url</td>
+                    <td>@account.Name</td>
+                    <td>@account.Login</td>
+                    <td>@account.Password</td>
+                    <td>@account.Url</td>
+                    <td>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-xl">Edit</button>
+                        <button type="button" class="btn btn-primary" onclick="deleteAccount()">Delete</button>
+                    </td>
                 </tr>
             }
+            <tr>
+                <td colspan="5">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-xl">Add</button>
+                </td>
+            </tr>
         </table>
     </div>
 
@@ -48,7 +89,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                @using (Html.BeginForm("Accounts", "Account", FormMethod.Post))
+                @using (Html.BeginForm("Add", "Account", FormMethod.Post))
                 {
                     <div class="modal-body">
                         <div class="row">
@@ -58,7 +99,7 @@
                             </div>
                             <div class="form-group col">
                                 @Html.LabelFor(m => m.Category)
-                                @Html.TextBoxFor(m => m.Name, new { @id = "categoryTextbox", @class = "form-control", @style = "position:absolute;width:50%;border-top-right-radius:0;border-bottom-right-radius:0;" })
+                                @Html.TextBoxFor(m => m.Category, new { @id = "categoryTextbox", @class = "form-control", @style = "position:absolute;width:75%;border-top-right-radius:0;border-bottom-right-radius:0;" })
                                 @Html.DropDownListFor(m => m.Category, new SelectList(categories, "Id", "Name"), "", new { @class = "form-control", @onchange = "document.getElementById('categoryTextbox').value = this.options[this.selectedIndex].text;" })
                             </div>
                         </div>

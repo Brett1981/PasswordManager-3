@@ -13,6 +13,9 @@ namespace WebApplication.DataAccess
             CreateMap<Dbo.Account, Account>();
             CreateMap<Account, Dbo.Account>();
 
+            CreateMap<Dbo.Category, Category>();
+            CreateMap<Category, Dbo.Category>();
+
             CreateMap<Dbo.User, User>();
             CreateMap<User, Dbo.User>();
         }

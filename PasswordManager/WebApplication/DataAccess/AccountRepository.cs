@@ -35,14 +35,5 @@ namespace WebApplication.DataAccess
             }
             return categoriesList;
         }
-
-        public int? GetCategoryByName(string name, int sessionId)
-        {
-            var account = _context.Accounts.Where(x => x.SessionId == sessionId && x.Category.Name == name).FirstOrDefault();
-            if (account == null)
-                return null;
-
-            return account.CategoryId;
-        }
     }
 }

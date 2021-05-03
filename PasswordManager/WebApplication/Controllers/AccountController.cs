@@ -35,7 +35,7 @@ namespace WebApplication.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Accounts(AccountViewModel accountViewModel)
+        public async Task<ActionResult> Add(AccountViewModel accountViewModel)
         {
             var account = new Dbo.Account();
             account.Name = accountViewModel.Name;
@@ -44,10 +44,32 @@ namespace WebApplication.Controllers
             account.Url = accountViewModel.Url;
             account.Name = accountViewModel.Name;
 
-            account.CategoryId = _accountRepository.GetCategoryByName(accountViewModel.Category, 17);
             account.SessionId = 17;
 
+            if (!String.IsNullOrEmpty(accountViewModel.Category))
+            {
+                var categoryId = _categoryRepository.GetByName(accountViewModel.Category);
+                if (categoryId != null) // Category already exists
+                    account.CategoryId = categoryId;
+                else // Category does not exist
+                {
+                    var newCategory = new Dbo.Category();
+                    newCategory.Name = accountViewModel.Category;
+
+                    await _categoryRepository.Insert(newCategory);
+
+                    account.CategoryId = _categoryRepository.GetByName(accountViewModel.Category);
+                }
+            }
+
             await _accountRepository.Insert(account);
+
+            return RedirectToAction("Accounts", "Account");
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> Delete(AccountViewModel accountViewModel)
+        {
             return RedirectToAction("Accounts", "Account");
         }
     }

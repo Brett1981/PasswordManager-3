@@ -10,6 +10,5 @@ namespace WebApplication.DataAccess.Interfaces
         public List<Dbo.Account> GetById(int id);
         public List<Dbo.Account> GetBySessionId(int sessionId);
         public List<Dbo.Category> GetCategoriesBySessionId(int sessionId);
-        public int? GetCategoryByName(string name, int sessionId);
     }
 }
