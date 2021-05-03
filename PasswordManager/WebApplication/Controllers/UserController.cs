@@ -31,6 +31,12 @@ namespace WebApplication.Controllers
             return View();
         }
 
+        public IActionResult Deconnexion()
+        {
+            
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Login(string login, string password)
