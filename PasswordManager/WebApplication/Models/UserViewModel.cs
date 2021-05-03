@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace WebApplication.Models
 {
-
-
     public class UserViewModel
     {
         public string email { get; set; }

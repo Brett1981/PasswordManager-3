@@ -13,14 +13,14 @@ namespace WebApplication.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly DataAccess.Interfaces.IAccountsRepository _accountsRepository;
+        private readonly DataAccess.Interfaces.IAccountRepository _accountRepository;
         IndexViewModel indexViewModel;
 
-        public HomeController(ILogger<HomeController> logger, DataAccess.Interfaces.IAccountsRepository accountsRepository)
+        public HomeController(ILogger<HomeController> logger, DataAccess.Interfaces.IAccountRepository accountRepository)
         {
             _logger = logger;
-            _accountsRepository = accountsRepository;
-            indexViewModel = new IndexViewModel(_accountsRepository);
+            _accountRepository = accountRepository;
+            indexViewModel = new IndexViewModel(_accountRepository);
         }
 
         public async Task<IActionResult> Index()

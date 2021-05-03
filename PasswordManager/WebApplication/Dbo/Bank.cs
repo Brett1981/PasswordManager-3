@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WebApplication.Dbo
 {
-    public class Bank:IObjectWithId
+    public class Bank : IObjectWithId
     {
         public int Id { get; set; }
         public string NumberCard { get; set; }

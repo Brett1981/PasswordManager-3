@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WebApplication.Dbo
 {
-    public class User:IObjectWithId
+    public class User : IObjectWithId
     {
         public int Id { get; set; }
         public string Username { get; set; }

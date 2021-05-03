@@ -41,9 +41,7 @@ namespace WebApplication.DataAccess
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.CategoryId)
-                    .HasMaxLength(50)
-                    .HasColumnName("categoryId");
+                entity.Property(e => e.CategoryId).HasColumnName("categoryId");
 
                 entity.Property(e => e.Login)
                     .HasMaxLength(50)
@@ -57,14 +55,22 @@ namespace WebApplication.DataAccess
                     .HasMaxLength(50)
                     .HasColumnName("password");
 
-                entity.Property(e => e.SessionId)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .HasColumnName("sessionId");
+                entity.Property(e => e.SessionId).HasColumnName("sessionId");
 
                 entity.Property(e => e.Url)
                     .HasMaxLength(50)
                     .HasColumnName("url");
+
+                entity.HasOne(d => d.Category)
+                    .WithMany(p => p.Accounts)
+                    .HasForeignKey(d => d.CategoryId)
+                    .HasConstraintName("FK_Account_Category");
+
+                entity.HasOne(d => d.Session)
+                    .WithMany(p => p.Accounts)
+                    .HasForeignKey(d => d.SessionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Account_User");
             });
 
             modelBuilder.Entity<Bank>(entity =>
