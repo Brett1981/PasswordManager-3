@@ -4,10 +4,14 @@
     [login]      NVARCHAR (50) NULL,
     [password]   NVARCHAR (50) NULL,
     [url]        NVARCHAR (50) NULL,
-    [categoryId] NVARCHAR (50) NULL,
-    [sessionId]  NVARCHAR (50) NOT NULL,
-    CONSTRAINT [PK_Account] PRIMARY KEY CLUSTERED ([id] ASC)
+    [categoryId] INT           NULL,
+    [sessionId]  INT           NOT NULL,
+    CONSTRAINT [PK_Account] PRIMARY KEY CLUSTERED ([id] ASC),
+    CONSTRAINT [FK_Account_Category] FOREIGN KEY ([categoryId]) REFERENCES [dbo].[Category] ([id]),
+    CONSTRAINT [FK_Account_User] FOREIGN KEY ([sessionId]) REFERENCES [dbo].[User] ([id])
 );
+
+
 
 
 

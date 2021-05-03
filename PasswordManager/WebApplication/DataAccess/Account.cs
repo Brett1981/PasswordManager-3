@@ -12,7 +12,10 @@ namespace WebApplication.DataAccess
         public string Login { get; set; }
         public string Password { get; set; }
         public string Url { get; set; }
-        public string CategoryId { get; set; }
-        public string SessionId { get; set; }
+        public int? CategoryId { get; set; }
+        public int SessionId { get; set; }
+
+        public virtual Category Category { get; set; }
+        public virtual User Session { get; set; }
     }
 }

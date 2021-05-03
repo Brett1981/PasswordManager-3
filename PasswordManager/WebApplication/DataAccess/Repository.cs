@@ -56,7 +56,6 @@ namespace WebApplication.DataAccess
             _set.Add(dbEntity);
             try
             {
-
                 _context.SaveChanges();
                 ModelEntity newEntity = _mapper.Map<ModelEntity>(dbEntity);
                 return newEntity;
