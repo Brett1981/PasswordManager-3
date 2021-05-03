@@ -33,8 +33,8 @@ namespace WebApplication.Controllers
 
         public IActionResult Deconnexion()
         {
-            
-            return View();
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login", "User"); ;
         }
 
         [HttpPost]
