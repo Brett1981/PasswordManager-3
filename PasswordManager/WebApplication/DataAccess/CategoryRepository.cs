@@ -11,10 +11,10 @@ namespace WebApplication.DataAccess
         {
         }
 
-        public List<Dbo.Category> GetById(int id)
+        public Dbo.Category GetById(int id)
         {
-            var result = _context.Categories.Where(x => x.Id == id).ToList();
-            return _mapper.Map<List<Dbo.Category>>(result);
+            var result = _context.Categories.Where(x => x.Id == id).FirstOrDefault();
+            return _mapper.Map<Dbo.Category>(result);
         }
 
         public int? GetByName(string name)

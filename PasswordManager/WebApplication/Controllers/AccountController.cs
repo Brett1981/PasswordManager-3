@@ -67,7 +67,7 @@ namespace WebApplication.Controllers
             return RedirectToAction("Accounts", "Account");
         }
 
-        [HttpPut]
+        [HttpPost]
         public async Task<ActionResult> Update(AccountViewModel accountViewModel)
         {
             var account = _accountRepository.GetById(accountViewModel.Id);
@@ -106,6 +106,24 @@ namespace WebApplication.Controllers
             await _accountRepository.Delete(id);
 
             return RedirectToAction("Accounts", "Account");
+        }
+
+        [HttpGet]
+        public AccountViewModel GetById(int id)
+        {
+            var account = _accountRepository.GetById(id);
+
+            var accountViewModel = new AccountViewModel();
+            accountViewModel.Id = account.Id;
+            accountViewModel.Name = account.Name;
+            accountViewModel.Login = account.Login;
+            accountViewModel.Password = account.Password;
+            accountViewModel.Url = account.Url;
+
+            if (account.CategoryId != null)
+                accountViewModel.Category = _categoryRepository.GetById((int)account.CategoryId).Name;
+
+            return accountViewModel;
         }
     }
 }

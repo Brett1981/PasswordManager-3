@@ -21,11 +21,6 @@ namespace WebApplication.Models
             Accounts = new List<Dbo.Account>();
         }
 
-        public void GetById(int id)
-        {
-            Accounts = _accountRepository.GetById(id);
-        }
-
         public async void AddAccount(string name, string login, string password)
         {
             await _accountRepository.Insert(new Dbo.Account() { Name = name, Login = login, Password = password });
