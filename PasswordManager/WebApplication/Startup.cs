@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -29,7 +30,12 @@ namespace WebApplication
             services.AddEntityFrameworkSqlServer()
                         .AddDbContext<DataAccess.PasswordManagerContext>(options => options.UseSqlServer(_connectionString));
             services.AddDistributedMemoryCache();
-
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => false;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
             services.AddSession(options =>
             {
                 options.Cookie.Name = "PasswordManager.Session";

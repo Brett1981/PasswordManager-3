@@ -27,10 +27,10 @@ namespace WebApplication.Controllers
         {
             //indexViewModel.GetAll();
             //return View(indexViewModel);
-            var session = HttpContext.Session.GetString("Name");
+            var session = HttpContext.Session.GetInt32("SessionId");
             if ( session != null)
             {
-                return RedirectToAction("Privacy", "Home");
+                RedirectToAction("Accounts", "Account");
             }
             return RedirectToAction("Login","User");
         }

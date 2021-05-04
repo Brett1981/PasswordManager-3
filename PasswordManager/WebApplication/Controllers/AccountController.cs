@@ -15,6 +15,7 @@ namespace WebApplication.Controllers
         private readonly DataAccess.Interfaces.IAccountRepository _accountRepository;
         private readonly DataAccess.Interfaces.ICategoryRepository _categoryRepository;
         AccountViewModel accountViewModel;
+        public static int sessionId = 0;
 
         public AccountController(DataAccess.Interfaces.IAccountRepository accountRepository, DataAccess.Interfaces.ICategoryRepository categoryRepository)
         {
@@ -25,8 +26,11 @@ namespace WebApplication.Controllers
 
         public ActionResult Accounts()
         {
-            var accounts = _accountRepository.GetBySessionId(17);
-            var categories = _accountRepository.GetCategoriesBySessionId(17);
+            var id = HttpContext.Session.GetInt32("SessionId");
+            if (id != null)
+                sessionId = (int)id;
+            var accounts = _accountRepository.GetBySessionId(sessionId);
+            var categories = _accountRepository.GetCategoriesBySessionId(sessionId);
 
             ViewBag.Accounts = accounts;
             ViewBag.Categories = categories;
@@ -44,7 +48,7 @@ namespace WebApplication.Controllers
             account.Url = accountViewModel.Url;
             account.Name = accountViewModel.Name;
 
-            account.SessionId = 17;
+            account.SessionId = sessionId;
 
             if (!String.IsNullOrEmpty(accountViewModel.Category))
             {
@@ -77,7 +81,7 @@ namespace WebApplication.Controllers
             account.Url = accountViewModel.Url;
             account.Name = accountViewModel.Name;
 
-            account.SessionId = 17;
+            account.SessionId = sessionId;
 
             if (!String.IsNullOrEmpty(accountViewModel.Category))
             {

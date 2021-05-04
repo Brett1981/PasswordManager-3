@@ -26,15 +26,15 @@ namespace WebApplication.Controllers
         public IActionResult Login()
         {
             var name = HttpContext.Session.GetString("Username");
-            if (name!= null)
-                return RedirectToAction("Privacy", "Home");
+            if (name != null)
+                return RedirectToAction("Accounts", "Account");
             return View();
         }
 
         public IActionResult Deconnexion()
         {
             HttpContext.Session.Clear();
-            return RedirectToAction("Login", "User"); ;
+            return RedirectToAction("Login", "User");
         }
 
         [HttpPost]
@@ -48,8 +48,8 @@ namespace WebApplication.Controllers
 
                 HttpContext.Session.SetString("Username", userExist.Username);
                 
-                Console.WriteLine(HttpContext.Session.GetString("SessionUsername"));
-                return RedirectToAction("Privacy", "Home");
+
+                return RedirectToAction("Accounts", "Account");
             }
             return View();
         }
