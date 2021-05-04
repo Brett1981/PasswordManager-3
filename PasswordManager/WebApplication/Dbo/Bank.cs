@@ -12,5 +12,6 @@ namespace WebApplication.Dbo
         public string Name { get; set; }
         public string Date { get; set; }
         public string Cvc { get; set; }
+        public int SessionId { get; set; }
     }
 }

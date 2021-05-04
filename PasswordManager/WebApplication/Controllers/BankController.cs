@@ -20,22 +20,34 @@ namespace WebApplication.Controllers
             _bankRepository = bankRepository;
             
         }
-        /*
+        
         public ActionResult Banks()
         {
-            
-        }
+            var banks = _bankRepository.GetBySessionId(17);
+            ViewBag.Banks = banks;        
+            return View();
 
-        [HttpPost]
-        public async Task<ActionResult> Add(AccountViewModel accountViewModel)
-        {
-           
         }
+        [HttpPost]
+        public async Task<ActionResult> Add(BankViewModel bankViewModel)
+        {
+            var bank = new Dbo.Bank();
+            bank.Name = bankViewModel.Name;
+            bank.Cvc = bankViewModel.Cvc;
+            bank.Date = bankViewModel.Date;
+            bank.NumberCard = bankViewModel.NumberCard;
+            bank.SessionId = 17;
+
+            await _bankRepository.Insert(bank);
+
+            return RedirectToAction("Banks", "Bank");
+        } 
+        
 
         [HttpDelete]
-        public async Task<ActionResult> Delete(AccountViewModel accountViewModel)
+        public async Task<ActionResult> Delete(BankViewModel bankViewModel)
         {
-            return RedirectToAction("Accounts", "Account");
-        }*/
+            return RedirectToAction("Banks", "Bank");
+        }
     }
 }
