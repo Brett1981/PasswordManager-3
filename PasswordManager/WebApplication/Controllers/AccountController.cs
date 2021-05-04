@@ -129,5 +129,13 @@ namespace WebApplication.Controllers
 
             return accountViewModel;
         }
+
+        [HttpGet]
+        public Dbo.Category GetCategoryById(int id)
+        {
+            var category = _categoryRepository.GetById(id);
+
+            return category;
+        }
     }
 }

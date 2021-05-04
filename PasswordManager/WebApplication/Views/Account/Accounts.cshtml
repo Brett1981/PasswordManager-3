@@ -52,6 +52,7 @@
     }
 
     function deleteAccount(itemId) {
+        console.log(itemId);
         if (confirm("Are you sure you want to delete this account?"))
         {
             $.ajax({
@@ -66,30 +67,49 @@
         }
     }
 
+    $(document).ready(function () {
+        $('#addModal').on('hidden.bs.modal', function (e) {
+            var categoryField = document.getElementById("addCategory");
+            categoryField.value = "";
+        });
+    });
+
+    function getCategory(categoryId) {
+        $.ajax({
+            type: 'GET',
+            url: '@(Url.Action("GetCategoryById", "Account"))',
+            data: { 'id': categoryId },
+            cache: false,
+            success: function (result) {
+                var categoryField = document.getElementById("addCategory");
+
+                categoryField.value = result.name;
+            },
+        });
+    }
+
     function getAccount(itemId) {
-        $('#updateModal').on('show.bs.modal', function (e) {
-            $.ajax({
-                type: 'GET',
-                url: '@(Url.Action("GetById", "Account"))',
-                data: { 'id': itemId },
-                cache: false,
-                success: function (result) {
-                    var nameField = document.getElementById("updateName");
-                    var categoryField = document.getElementById("updateCategory");
-                    var loginField = document.getElementById("updateLogin");
-                    var passwordField = document.getElementById("updatePassword");
-                    var urlField = document.getElementById("updateUrl");
-                    var form = document.getElementById("updateForm");
+        $.ajax({
+            type: 'GET',
+            url: '@(Url.Action("GetById", "Account"))',
+            data: { 'id': itemId },
+            cache: false,
+            success: function (result) {
+                var nameField = document.getElementById("updateName");
+                var categoryField = document.getElementById("updateCategory");
+                var loginField = document.getElementById("updateLogin");
+                var passwordField = document.getElementById("updatePassword");
+                var urlField = document.getElementById("updateUrl");
+                var form = document.getElementById("updateForm");
 
-                    nameField.value = result.name;
-                    categoryField.value = result.category;
-                    loginField.value = result.login;
-                    passwordField.value = result.password;
-                    urlField.value = result.url;
+                nameField.value = result.name;
+                categoryField.value = result.category;
+                loginField.value = result.login;
+                passwordField.value = result.password;
+                urlField.value = result.url;
 
-                    form.action += '/' + itemId;
-                },
-            });
+                form.action += '/' + itemId;
+            },
         });
     }
 
@@ -116,6 +136,7 @@
 
 <div>
     <h1 class="display-4">Accounts</h1>
+    <input />
     <div>
         @foreach (var category in categories)
         {
@@ -141,14 +162,14 @@
                 }
                 <tr>
                     <td colspan="5">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal" onclick="getCategory(@category.Id)">Add</button>
                     </td>
                 </tr>
             </table>
         }
         <table class="table table-hover">
             <tr>
-                <th colspan="5">All elements</th>
+                <th colspan="5">Other</th>
             </tr>
             @foreach (var account in accounts)
             {
@@ -190,8 +211,8 @@
                             </div>
                             <div class="form-group col">
                                 @Html.LabelFor(m => m.Category)
-                                @Html.TextBoxFor(m => m.Category, new { @class = "form-control dropdown-text" })
-                                @Html.DropDownListFor(m => m.Category, new SelectList(categories, "Id", "Name"), "", new { @id = "categoryList", @class = "form-control", @onchange = "selectDropdown(this)" })
+                                @Html.TextBoxFor(m => m.Category, new { @id = "addCategory", @class = "form-control dropdown-text" })
+                                @Html.DropDownListFor(m => m.Category, new SelectList(categories, "Id", "Name"), "", new { @class = "form-control", @onchange = "selectDropdown(this)" })
                             </div>
                         </div>
                         <div class="row">

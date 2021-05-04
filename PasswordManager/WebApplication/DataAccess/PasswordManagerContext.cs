@@ -98,6 +98,8 @@ namespace WebApplication.DataAccess
                     .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("numberCard");
+
+                entity.Property(e => e.SessionId).HasColumnName("sessionId");
             });
 
             modelBuilder.Entity<Category>(entity =>
