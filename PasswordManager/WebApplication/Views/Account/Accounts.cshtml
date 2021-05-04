@@ -13,6 +13,11 @@
         vertical-align: middle !important;
     }
 
+    .search-box {
+        display: inline-flex;
+        width: 20%;
+    }
+
     .dropdown-text {
         position: absolute;
         width: 75%;
@@ -136,7 +141,18 @@
 
 <div>
     <h1 class="display-4">Accounts</h1>
-    <input />
+    @using (Html.BeginForm("Accounts", "Account", FormMethod.Post))
+    {
+        <div class="form-group search-group" >
+            @Html.TextBoxFor(m => m.Search.Value, new { @class = "form-control search-box" })
+            @Html.DropDownListFor(m => m.Search.SearchBy, new List<SelectListItem>
+            {
+                new SelectListItem { Text = "By name", Value = "name" },
+                new SelectListItem { Text = "By category", Value = "category" },
+            }, new { @class = "form-control search-box" })
+            <input type="submit" value="Search" class="btn btn-primary" />
+        </div>
+    }
     <div>
         @foreach (var category in categories)
         {
@@ -249,7 +265,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                @using (Html.BeginForm("Update", "Account", FormMethod.Post, new { @id = "updateForm" } ))
+                @using (Html.BeginForm("Update", "Account", FormMethod.Post, new { @id = "updateForm" }))
                 {
                     <div class="modal-body">
                         <div class="row">

@@ -137,5 +137,35 @@ namespace WebApplication.Controllers
 
             return category;
         }
+
+        [HttpPost]
+        public ActionResult Accounts(AccountViewModel accountViewModel)
+        {
+            if (String.IsNullOrEmpty(accountViewModel.Search.Value))
+                return RedirectToAction("Accounts", "Account");
+
+            if (accountViewModel.Search.SearchBy == "name")
+            {
+                var accounts = _accountRepository.GetBySessionId(sessionId);
+                var filteredAccounts = accounts.Where(x => x.Name.Contains(accountViewModel.Search.Value)).ToList();
+
+                var categories = _accountRepository.GetCategoriesBySessionId(sessionId);
+                var filteredCategories = categories.Where(x => filteredAccounts.Any(y => y.CategoryId == x.Id)).Distinct().ToList();
+
+                ViewBag.Accounts = filteredAccounts;
+                ViewBag.Categories = filteredCategories;
+            }
+            else
+            {
+                var accounts = _accountRepository.GetBySessionId(sessionId);
+                var categories = _accountRepository.GetCategoriesBySessionId(sessionId);
+                var filteredCategories = categories.Where(x => x.Name.Contains(accountViewModel.Search.Value)).ToList();
+
+                ViewBag.Accounts = accounts;
+                ViewBag.Categories = filteredCategories;
+            }
+
+            return View();
+        }
     }
 }
