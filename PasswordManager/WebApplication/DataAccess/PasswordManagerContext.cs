@@ -43,6 +43,10 @@ namespace WebApplication.DataAccess
 
                 entity.Property(e => e.CategoryId).HasColumnName("categoryId");
 
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("date")
+                    .HasDefaultValueSql("(getdate())");
+
                 entity.Property(e => e.Login)
                     .HasMaxLength(50)
                     .HasColumnName("login");

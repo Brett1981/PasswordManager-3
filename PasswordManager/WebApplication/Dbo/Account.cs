@@ -14,5 +14,6 @@ namespace WebApplication.Dbo
         public string Url { get; set; }
         public int? CategoryId { get; set; }
         public int SessionId { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

@@ -14,6 +14,7 @@ namespace WebApplication.DataAccess
         public string Url { get; set; }
         public int? CategoryId { get; set; }
         public int SessionId { get; set; }
+        public DateTime CreatedAt { get; set; }
 
         public virtual Category Category { get; set; }
         public virtual User Session { get; set; }
