@@ -41,9 +41,10 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Login(UserViewModel user)
         {
-
+            if (!ModelState.IsValid)
+                return View();
             var userExist = _userRepository.GetUser(user.login, user.password);
-            if (ModelState.IsValid && userExist != null)
+            if (userExist != null)
             {
                 HttpContext.Session.SetInt32("SessionId", userExist.Id);
 
@@ -86,7 +87,7 @@ namespace WebApplication.Controllers
             }
             else
             {
-                ViewBag.ErrorMessage = "Email already exist";
+                ViewBag.ErrorEmail = "Email already exist";
                 return View();
             }
         }
