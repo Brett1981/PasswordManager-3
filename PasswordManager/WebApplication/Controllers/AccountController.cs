@@ -67,18 +67,23 @@ namespace WebApplication.Controllers
             }
 
             accounts.ForEach((e) => {
-                var breach = breachList.Find((b) => b.Domain.Length > 0 && e.Url.Contains(b.Domain));
-                if (breach != null)
+                if (e.Url != null)
                 {
-                    var message = "";
-                    if (breach.DataClasses.Contains("Email addresses"))
-                        message += "Email address";
-                    if (breach.DataClasses.Contains("Usernames"))
-                        message += ", Username";
-                    if (breach.DataClasses.Contains("Passwords"))
-                        message += " and Password";
+                    var breach = breachList.Find((b) => b.Domain.Length > 0 && e.Url.Contains(b.Domain));
+                    if (breach != null)
+                    {
+                        var message = "";
+                        if (breach.DataClasses.Contains("Email addresses"))
+                            message += "Email address";
+                        if (breach.DataClasses.Contains("Usernames"))
+                            message += ", Username";
+                        if (breach.DataClasses.Contains("Passwords"))
+                            message += " and Password";
 
-                    res.Add(e, message + " compromised !");
+                        res.Add(e, message + " compromised !");
+                    }
+                    else
+                        res.Add(e, "");
                 }
                 else
                     res.Add(e, "");
@@ -89,11 +94,15 @@ namespace WebApplication.Controllers
         [HttpPost]
         public async Task<ActionResult> Add(AccountViewModel accountViewModel)
         {
+            if (!ModelState.IsValid)
+                return View();
+
             var account = new Dbo.Account();
             account.Name = accountViewModel.Name;
             account.Login = accountViewModel.Login;
             account.Password = accountViewModel.Password;
-            account.Url = accountViewModel.Url;
+            if (!String.IsNullOrEmpty(accountViewModel.Url))
+                account.Url = "http://" + accountViewModel.Url;
             account.Name = accountViewModel.Name;
 
             account.SessionId = sessionId;
@@ -126,7 +135,8 @@ namespace WebApplication.Controllers
             account.Name = accountViewModel.Name;
             account.Login = accountViewModel.Login;
             account.Password = accountViewModel.Password;
-            account.Url = accountViewModel.Url;
+            if (!String.IsNullOrEmpty(accountViewModel.Url))
+                account.Url = "http://" + accountViewModel.Url;
             account.Name = accountViewModel.Name;
 
             account.SessionId = sessionId;

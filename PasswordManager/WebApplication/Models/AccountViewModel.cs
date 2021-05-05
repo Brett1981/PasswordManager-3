@@ -12,6 +12,7 @@ namespace WebApplication.Models
         public string Name { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
+
         public string Url { get; set; }
         [Display(Name = "Category")]
         public string Category { get; set; }

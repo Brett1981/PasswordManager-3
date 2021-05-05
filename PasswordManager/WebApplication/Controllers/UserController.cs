@@ -52,9 +52,9 @@ namespace WebApplication.Controllers
 
                 return RedirectToAction("Accounts", "Account");
             }
-            else if (user.login != "" && user.password != "")
+            else if (userExist == null)
             {
-                ViewBag.ErrorMessage = "User does not exist";
+                ViewBag.ErrorMessage = "User or password invalid";
                 return View();
             }
             else
