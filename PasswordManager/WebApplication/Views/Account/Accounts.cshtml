@@ -3,8 +3,8 @@
 @{
     ViewBag.Title = "Accounts";
     var accounts = ViewBag.Accounts;
+    var unattachedAccounts = ViewBag.Unattached;
     var categories = ViewBag.Categories;
-    var id = ViewBag.Id;
 }
 
 <style>
@@ -157,7 +157,7 @@
         @foreach (var category in categories)
         {
             <table class="table table-hover">
-                <tr>
+                <tr class="table-primary">
                     <th colspan="5">@category.Name</th>
                 </tr>
                 @foreach (var account in accounts)
@@ -183,32 +183,35 @@
                 </tr>
             </table>
         }
-        <table class="table table-hover">
-            <tr>
-                <th colspan="5">All elements</th>
-            </tr>
-            @foreach (var account in accounts)
-            {
+        @if (unattachedAccounts.Count != 0)
+        {
+            <table class="table table-hover">
+                <tr class="table-primary">
+                    <th colspan="5">Other accounts</th>
+                </tr>
+                @foreach (var account in unattachedAccounts)
+                {
+                    <tr>
+                        <td>@account.Name</td>
+                        <td><a class="copyable" onclick="copyToClipboard('@account.Login')">@account.Login</a></td>
+                        <td><a class="hidetext" onclick="copyToClipboard('@account.Password')">@account.Password</a></td>
+                        <td><a href="@account.Url">@account.Url</a></td>
+                        <td>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal" data-id="@account.Id" onclick="getAccount(@account.Id)">Edit</button>
+                            <button type="button" class="btn btn-primary" onclick="deleteAccount(@account.Id)">Delete</button>
+                        </td>
+                    </tr>
+                }
                 <tr>
-                    <td>@account.Name</td>
-                    <td><a class="copyable" onclick="copyToClipboard('@account.Login')">@account.Login</a></td>
-                    <td><a class="hidetext" onclick="copyToClipboard('@account.Password')">@account.Password</a></td>
-                    <td><a href="@account.Url">@account.Url</a></td>
-                    <td>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal" data-id="@account.Id" onclick="getAccount(@account.Id)">Edit</button>
-                        <button type="button" class="btn btn-primary" onclick="deleteAccount(@account.Id)">Delete</button>
+                    <td colspan="5">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add</button>
                     </td>
                 </tr>
-            }
-            <tr>
-                <td colspan="5">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add</button>
-                </td>
-            </tr>
-        </table>
+            </table>
+        }
     </div>
 
-    <div id="addModal" class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+    <div id="addModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -256,7 +259,7 @@
         </div>
     </div>
 
-    <div id="updateModal" class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+    <div id="updateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
