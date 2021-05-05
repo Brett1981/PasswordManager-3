@@ -17,6 +17,13 @@ namespace WebApplication.Controllers
         AccountViewModel accountViewModel;
         public static int sessionId = 0;
 
+        public class Breach
+        {
+            public string Domain { get; set; }
+            public DateTime BreachDate { get; set; }
+            public List<string> DataClasses { get; set; }
+        }
+
         public AccountController(DataAccess.Interfaces.IAccountRepository accountRepository, DataAccess.Interfaces.ICategoryRepository categoryRepository)
         {
             accountViewModel = new AccountViewModel();
@@ -26,9 +33,9 @@ namespace WebApplication.Controllers
 
         public ActionResult Accounts()
         {
-            var name = HttpContext.Session.GetString("Username");
+            /*var name = HttpContext.Session.GetString("Username");
             if (name == null)
-                return RedirectToAction("Login", "User");
+                return RedirectToAction("Login", "User");*/
             var id = HttpContext.Session.GetInt32("SessionId");
             if (id != null)
                 sessionId = (int)id;
@@ -36,11 +43,47 @@ namespace WebApplication.Controllers
             var unattachedAccounts = accounts.Where(x => x.CategoryId == null).ToList();
             var categories = _accountRepository.GetCategoriesBySessionId(sessionId);
 
-            ViewBag.Accounts = accounts;
+            ViewBag.Accounts = checkCompromisedPasswords(accounts).Result;
             ViewBag.Unattached = unattachedAccounts;
             ViewBag.Categories = categories;
 
             return View();
+        }
+
+        [HttpGet]
+        public async Task<Dictionary<Dbo.Account, string>> checkCompromisedPasswords(List<Dbo.Account> accounts)
+        {
+            var res = new Dictionary<Dbo.Account, string>();
+
+            var breachList = new List<Breach>();
+
+            using (var httpClient = new System.Net.Http.HttpClient())
+            {
+                using (var response = await httpClient.GetAsync("https://haveibeenpwned.com/api/v3/breaches"))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    breachList = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Breach>>(apiResponse);
+                }
+            }
+
+            accounts.ForEach((e) => {
+                var breach = breachList.Find((b) => b.Domain.Length > 0 && e.Url.Contains(b.Domain));
+                if (breach != null)
+                {
+                    var message = "";
+                    if (breach.DataClasses.Contains("Email addresses"))
+                        message += "Email address";
+                    if (breach.DataClasses.Contains("Usernames"))
+                        message += ", Username";
+                    if (breach.DataClasses.Contains("Passwords"))
+                        message += " and Password";
+
+                    res.Add(e, message + " compromised !");
+                }
+                else
+                    res.Add(e, "");
+            });
+            return res;
         }
 
         [HttpPost]

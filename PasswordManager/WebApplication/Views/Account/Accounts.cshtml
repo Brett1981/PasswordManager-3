@@ -34,10 +34,10 @@
         -webkit-text-security: disc;
     }
 
-    .hidetext:hover {
-        cursor: pointer;
-        -webkit-text-security: none;
-    }
+        .hidetext:hover {
+            cursor: pointer;
+            -webkit-text-security: none;
+        }
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -59,7 +59,7 @@
     }
 
     $(document).ready(function () {
-        $('#addModal').on('hidden.bs.modal', function (e) {
+        $('#addModal').on('hidden.bs.modal', function () {
             var categoryField = document.getElementById("addCategory");
             categoryField.value = "";
         });
@@ -108,10 +108,6 @@
         elt.previousElementSibling.value = elt.options[elt.selectedIndex].text;
     }
 
-    function showPassword() {
-        var elt = document.getElementsByClassName("hidetext");
-    }
-
     function showInputPassword(elt) {
         if (elt.previousElementSibling.type === "password") {
             elt.previousElementSibling.type = "text";
@@ -129,7 +125,7 @@
     <h1 class="display-4">Accounts</h1>
     @using (Html.BeginForm("Accounts", "Account", FormMethod.Post))
     {
-        <div class="form-group search-group" >
+        <div class="form-group search-group">
             @Html.TextBoxFor(m => m.Search.Value, new { @class = "form-control search-box" })
             @Html.DropDownListFor(m => m.Search.SearchBy, new List<SelectListItem>
             {
@@ -148,16 +144,20 @@
                 </tr>
                 @foreach (var account in accounts)
                 {
-                    @if (account.CategoryId == category.Id)
+                    @if (account.Key.CategoryId == category.Id)
                     {
                         <tr>
-                            <td>@account.Name</td>
-                            <td><a class="copyable" onclick="copyToClipboard('@account.Login')">@account.Login</a></td>
-                            <td><a class="hidetext" onclick="copyToClipboard('@account.Password')">@account.Password</a></td>
-                            <td><a href="@account.Url">@account.Url</a></td>
+                            <td>@account.Key.Name</td>
+                            <td><a class="copyable" onclick="copyToClipboard('@account.Key.Login')">@account.Key.Login</a></td>
+                            <td><a class="hidetext" onclick="copyToClipboard('@account.Key.Password')">@account.Key.Password</a></td>
+                            <td><a href="@account.Key.Url">@account.Key.Url</a></td>
                             <td>
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal" onclick="getAccount(@account.Id)">Edit</button>
-                                <button type="button" class="btn btn-primary" onclick="deleteAccount(@account.Id)">Delete</button>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal" onclick="getAccount(@account.Key.Id)">Edit</button>
+                                <button type="button" class="btn btn-primary" onclick="deleteAccount(@account.Key.Id)">Delete</button>
+                                @if (account.Value != "")
+                                {
+                                    <p style="color: red">@account.Value</p>
+                                }
                             </td>
                         </tr>
                     }
@@ -168,33 +168,33 @@
                     </td>
                 </tr>
             </table>
-            }
-            <table class="table table-hover">
-                @if (unattachedAccounts.Count != 0)
+        }
+        <table class="table table-hover">
+            @if (unattachedAccounts.Count != 0)
+            {
+                <tr class="table-primary">
+                    <th colspan="5">Other accounts</th>
+                </tr>
+                @foreach (var account in unattachedAccounts)
                 {
-                    <tr class="table-primary">
-                        <th colspan="5">Other accounts</th>
-                    </tr>
-                    @foreach (var account in unattachedAccounts)
-                    {
-                        <tr>
-                            <td>@account.Name</td>
-                            <td><a class="copyable" onclick="copyToClipboard('@account.Login')">@account.Login</a></td>
-                            <td><a class="hidetext" onclick="copyToClipboard('@account.Password')">@account.Password</a></td>
-                            <td><a href="@account.Url">@account.Url</a></td>
-                            <td>
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal" data-id="@account.Id" onclick="getAccount(@account.Id)">Edit</button>
-                                <button type="button" class="btn btn-primary" onclick="deleteAccount(@account.Id)">Delete</button>
-                            </td>
-                        </tr>
-                    }
-                }
                     <tr>
-                        <td colspan="5">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add</button>
+                        <td>@account.Name</td>
+                        <td><a class="copyable" onclick="copyToClipboard('@account.Login')">@account.Login</a></td>
+                        <td><a class="hidetext" onclick="copyToClipboard('@account.Password')">@account.Password</a></td>
+                        <td><a href="@account.Url">@account.Url</a></td>
+                        <td>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal" data-id="@account.Id" onclick="getAccount(@account.Id)">Edit</button>
+                            <button type="button" class="btn btn-primary" onclick="deleteAccount(@account.Id)">Delete</button>
                         </td>
                     </tr>
-            </table>
+                }
+            }
+            <tr>
+                <td colspan="5">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add</button>
+                </td>
+            </tr>
+        </table>
     </div>
 
     <div id="addModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
