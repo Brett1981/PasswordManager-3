@@ -39,19 +39,27 @@ namespace WebApplication.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Login(string login, string password)
+        public IActionResult Login(UserViewModel user)
         {
-            var userExist = _userRepository.GetUser(login, password);
-            if (userExist != null)
+
+            var userExist = _userRepository.GetUser(user.login, user.password);
+            if (ModelState.IsValid && userExist != null)
             {
                 HttpContext.Session.SetInt32("SessionId", userExist.Id);
 
                 HttpContext.Session.SetString("Username", userExist.Username);
-                
 
                 return RedirectToAction("Accounts", "Account");
             }
-            return View();
+            else if (user.login != "" && user.password != "")
+            {
+                ViewBag.ErrorMessage = "User does not exist";
+                return View();
+            }
+            else
+            {
+                return View();
+            }
         }
 
         public IActionResult Register()
@@ -60,25 +68,27 @@ namespace WebApplication.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(string email,string login, string password, string confirmpassword)
+        public async Task<IActionResult> Register(UserViewModel user)
         {
-            if (password != confirmpassword)
+            if (!ModelState.IsValid)
+                return View();
+            if (user.password != user.confirmpassword)
             {
-                ViewBag.error = "Password wrong";
+                ViewBag.ErrorMessage = "Password not match";
                 return View();
             }
-
-
-            var emailExist = _userRepository.GetEmail(email);
-
+            var emailExist = _userRepository.GetEmail(user.email);
             if (emailExist == null)
             {
-                string passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
-                await _userRepository.Insert(new Dbo.User() { Username = login, Password = passwordHash ,Email = email });;
-
+                string passwordHash = BCrypt.Net.BCrypt.HashPassword(user.password);
+                await _userRepository.Insert(new Dbo.User() { Username = user.login, Password = passwordHash ,Email = user.email });;
+                return RedirectToAction("Login", "User");
             }
-            return RedirectToAction("Login","User");
-
+            else
+            {
+                ViewBag.ErrorMessage = "Email already exist";
+                return View();
+            }
         }
     }
 }
