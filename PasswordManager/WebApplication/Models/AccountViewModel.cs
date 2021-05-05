@@ -15,5 +15,7 @@ namespace WebApplication.Models
         public string Url { get; set; }
         [Display(Name = "Category")]
         public string Category { get; set; }
+
+        public SearchViewModel Search { get; set; }
     }
 }

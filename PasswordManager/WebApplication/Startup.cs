@@ -51,6 +51,7 @@ namespace WebApplication
             services.AddTransient<DataAccess.Interfaces.IAccountRepository, DataAccess.AccountRepository>();
             services.AddTransient<DataAccess.Interfaces.ICategoryRepository, DataAccess.CategoryRepository>();
             services.AddTransient<DataAccess.Interfaces.IUserRepository, DataAccess.UserRepository>();
+            services.AddTransient<DataAccess.Interfaces.IBankRepository, DataAccess.BankRepository>();
             services.AddControllersWithViews();
             services.AddMvc(options => options.EnableEndpointRouting = false);
 

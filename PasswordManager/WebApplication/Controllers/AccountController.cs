@@ -30,9 +30,11 @@ namespace WebApplication.Controllers
             if (id != null)
                 sessionId = (int)id;
             var accounts = _accountRepository.GetBySessionId(sessionId);
+            var unattachedAccounts = accounts.Where(x => x.CategoryId == null).ToList();
             var categories = _accountRepository.GetCategoriesBySessionId(sessionId);
 
             ViewBag.Accounts = accounts;
+            ViewBag.Unattached = unattachedAccounts;
             ViewBag.Categories = categories;
 
             return View();
@@ -53,9 +55,9 @@ namespace WebApplication.Controllers
             if (!String.IsNullOrEmpty(accountViewModel.Category))
             {
                 var categoryId = _categoryRepository.GetByName(accountViewModel.Category);
-                if (categoryId != null) // Category already exists
+                if (categoryId != null)     // Category already exists
                     account.CategoryId = categoryId;
-                else // Category does not exist
+                else     // Category does not exist
                 {
                     var newCategory = new Dbo.Category();
                     newCategory.Name = accountViewModel.Category;
@@ -86,9 +88,9 @@ namespace WebApplication.Controllers
             if (!String.IsNullOrEmpty(accountViewModel.Category))
             {
                 var categoryId = _categoryRepository.GetByName(accountViewModel.Category);
-                if (categoryId != null) // Category already exists
+                if (categoryId != null)     // Category already exists
                     account.CategoryId = categoryId;
-                else // Category does not exist
+                else     // Category does not exist
                 {
                     var newCategory = new Dbo.Category();
                     newCategory.Name = accountViewModel.Category;
@@ -136,6 +138,39 @@ namespace WebApplication.Controllers
             var category = _categoryRepository.GetById(id);
 
             return category;
+        }
+
+        [HttpPost]
+        public ActionResult Accounts(AccountViewModel accountViewModel)
+        {
+            if (String.IsNullOrEmpty(accountViewModel.Search.Value))
+                return RedirectToAction("Accounts", "Account");
+
+            if (accountViewModel.Search.SearchBy == "name")
+            {
+                var accounts = _accountRepository.GetBySessionId(sessionId);
+                var filteredAccounts = accounts.Where(x => x.Name.ToLower().Contains(accountViewModel.Search.Value.ToLower())).ToList();
+                var unattachedAccounts = filteredAccounts.Where(x => x.CategoryId == null).ToList();
+
+                var categories = _accountRepository.GetCategoriesBySessionId(sessionId);
+                var filteredCategories = categories.Where(x => filteredAccounts.Any(y => y.CategoryId == x.Id)).Distinct().ToList();
+
+                ViewBag.Accounts = filteredAccounts;
+                ViewBag.Unattached = unattachedAccounts;
+                ViewBag.Categories = filteredCategories;
+            }
+            else
+            {
+                var accounts = _accountRepository.GetBySessionId(sessionId);
+                var categories = _accountRepository.GetCategoriesBySessionId(sessionId);
+                var filteredCategories = categories.Where(x => x.Name.ToLower().Contains(accountViewModel.Search.Value.ToLower())).ToList();
+
+                ViewBag.Accounts = accounts;
+                ViewBag.Unattached = new List<Dbo.Account>();
+                ViewBag.Categories = filteredCategories;
+            }
+
+            return View();
         }
     }
 }
