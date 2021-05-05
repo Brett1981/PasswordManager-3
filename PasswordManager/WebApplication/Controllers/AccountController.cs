@@ -26,6 +26,9 @@ namespace WebApplication.Controllers
 
         public ActionResult Accounts()
         {
+            var name = HttpContext.Session.GetString("Username");
+            if (name == null)
+                return RedirectToAction("Login", "User");
             var id = HttpContext.Session.GetInt32("SessionId");
             if (id != null)
                 sessionId = (int)id;
