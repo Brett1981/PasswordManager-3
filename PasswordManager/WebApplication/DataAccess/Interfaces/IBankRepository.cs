@@ -8,7 +8,7 @@ namespace WebApplication.DataAccess.Interfaces
     public interface IBankRepository : IRepository<Bank, Dbo.Bank>
     {
 
-        public List<Dbo.Bank> GetById(int id);
+        public Dbo.Bank GetById(int id);
         public List<Dbo.Bank> GetBySessionId(int sessionId);
         
     }

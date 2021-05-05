@@ -12,10 +12,10 @@ namespace WebApplication.DataAccess
         public BankRepository(PasswordManagerContext context, ILogger<BankRepository> logger, IMapper mapper) : base(context, logger, mapper)
         {
         }
-        public List<Dbo.Bank> GetById(int id)
+        public Dbo.Bank GetById(int id)
         {
-            var result = _context.Banks.Where(x => x.Id == id).ToList();
-            return _mapper.Map<List<Dbo.Bank>>(result);
+            var result = _context.Banks.Where(x => x.Id == id).FirstOrDefault();
+            return _mapper.Map<Dbo.Bank>(result);
         }
 
         public List<Dbo.Bank> GetBySessionId(int sessionId)

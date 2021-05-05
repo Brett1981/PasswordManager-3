@@ -7,6 +7,7 @@ namespace WebApplication.Models
 {
     public class BankViewModel
     {
+        public int Id { get; set; }
         public string NumberCard { get; set; }
         public string Name { get; set; }
         public string Date { get; set; }
