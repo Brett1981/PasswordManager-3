@@ -1,8 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Images\profil2.svg" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
