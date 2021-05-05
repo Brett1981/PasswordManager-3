@@ -183,33 +183,33 @@
                     </td>
                 </tr>
             </table>
-        }
-        @if (unattachedAccounts.Count != 0)
-        {
+            }
             <table class="table table-hover">
-                <tr class="table-primary">
-                    <th colspan="5">Other accounts</th>
-                </tr>
-                @foreach (var account in unattachedAccounts)
+                @if (unattachedAccounts.Count != 0)
                 {
+                    <tr class="table-primary">
+                        <th colspan="5">Other accounts</th>
+                    </tr>
+                    @foreach (var account in unattachedAccounts)
+                    {
+                        <tr>
+                            <td>@account.Name</td>
+                            <td><a class="copyable" onclick="copyToClipboard('@account.Login')">@account.Login</a></td>
+                            <td><a class="hidetext" onclick="copyToClipboard('@account.Password')">@account.Password</a></td>
+                            <td><a href="@account.Url">@account.Url</a></td>
+                            <td>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal" data-id="@account.Id" onclick="getAccount(@account.Id)">Edit</button>
+                                <button type="button" class="btn btn-primary" onclick="deleteAccount(@account.Id)">Delete</button>
+                            </td>
+                        </tr>
+                    }
+                }
                     <tr>
-                        <td>@account.Name</td>
-                        <td><a class="copyable" onclick="copyToClipboard('@account.Login')">@account.Login</a></td>
-                        <td><a class="hidetext" onclick="copyToClipboard('@account.Password')">@account.Password</a></td>
-                        <td><a href="@account.Url">@account.Url</a></td>
-                        <td>
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal" data-id="@account.Id" onclick="getAccount(@account.Id)">Edit</button>
-                            <button type="button" class="btn btn-primary" onclick="deleteAccount(@account.Id)">Delete</button>
+                        <td colspan="5">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add</button>
                         </td>
                     </tr>
-                }
-                <tr>
-                    <td colspan="5">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add</button>
-                    </td>
-                </tr>
             </table>
-        }
     </div>
 
     <div id="addModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
