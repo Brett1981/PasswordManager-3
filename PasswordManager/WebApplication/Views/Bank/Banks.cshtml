@@ -1,0 +1,92 @@
+﻿@model BankViewModel
+
+@{
+    ViewBag.Title = "Banks";
+    var banks = ViewBag.Banks;
+}
+<script>
+    function deleteAccount() {
+        if (confirm("Are you sure to delete this bank?")) {
+            var tr = $(this).parents('tr:first');
+            console.log(tr);
+            var ID = $(this).prop('id');
+            console.log();
+            //Deletes the record with ID sent below
+            $.post(
+                '/Banks/Delete/',
+                { ID: ID },
+                function (item) {
+                    tr.remove();
+                }, "json");
+            location.reload();
+        }
+    });
+</script>
+<div>
+    <h1 class="display-4">Accounts</h1>
+    <div>
+        <table class="table table-hover table-primary">
+            <tr>
+                <th colspan="5">All elements</th>
+            </tr>
+            @foreach (var bank in banks)
+            {
+                <tr>
+                    <td>@bank.Name</td>
+                    <td>@bank.NumberCard</td>
+                    <td>@bank.Date</td>
+                    <td>@bank.Cvc</td>
+                    <td>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-xl">Edit</button>
+                        <button type="button" class="btn btn-primary" onclick="deleteBank()">Delete</button>
+                    </td>
+                </tr>
+            }
+            <td colspan="5">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-xl">Add</button>
+            </td>
+        </table>
+    </div>
+
+    <div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add a Bank</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @using (Html.BeginForm("Add", "Bank", FormMethod.Post))
+                {
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group col">
+                                @Html.LabelFor(m => m.Name)
+                                @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col">
+                                @Html.LabelFor(m => m.NumberCard)
+                                @Html.TextBoxFor(m => m.NumberCard, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group col">
+                                @Html.LabelFor(m => m.Cvc)
+                                @Html.TextBoxFor(m => m.Cvc, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Date)
+                            @Html.TextBoxFor(m => m.Date, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
