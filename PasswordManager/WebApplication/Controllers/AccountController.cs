@@ -179,7 +179,7 @@ namespace WebApplication.Controllers
             accountViewModel.Name = account.Name;
             accountViewModel.Login = account.Login;
             accountViewModel.Password = account.Password;
-            accountViewModel.Url = account.Url;
+            accountViewModel.Url = account.Url.Substring(7);
 
             if (account.CategoryId != null)
                 accountViewModel.Category = _categoryRepository.GetById((int)account.CategoryId).Name;
