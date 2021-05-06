@@ -182,13 +182,17 @@
                 @foreach (var account in unattachedAccounts)
                 {
                     <tr>
-                        <td>@account.Name</td>
-                        <td><a class="copyable" onclick="copyToClipboard('@account.Login')">@account.Login</a></td>
-                        <td><a class="hidetext" onclick="copyToClipboard('@account.Password')">@account.Password</a></td>
-                        <td><a href="@account.Url">@account.Url</a></td>
+                        <td>@account.Key.Name</td>
+                        <td><a class="copyable" onclick="copyToClipboard('@account.Key.Login')">@account.Key.Login</a></td>
+                        <td><a class="hidetext" onclick="copyToClipboard('@account.Key.Password')">@account.Key.Password</a></td>
+                        <td><a href="@account.Key.Url">@account.Key.Url</a></td>
                         <td>
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal" data-id="@account.Id" onclick="getAccount(@account.Id)">Edit</button>
-                            <button type="button" class="btn btn-primary" onclick="deleteAccount(@account.Id)">Delete</button>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal" data-id="@account.Key.Id" onclick="getAccount(@account.Key.Id)">Edit</button>
+                            <button type="button" class="btn btn-primary" onclick="deleteAccount(@account.Key.Id)">Delete</button>
+                            @if (account.Value != "")
+                            {
+                                <p style="color: red">@account.Value</p>
+                            }
                         </td>
                     </tr>
                 }
@@ -269,7 +273,7 @@
                         <div class="row">
                             <div class="form-group col">
                                 @Html.LabelFor(m => m.Name)
-                                @Html.TextBoxFor(m => m.Name, new { @id = "updateName", @class = "form-control" })
+                                @Html.TextBoxFor(m => m.Name, new { @id = "updateName", @class = "form-control", @required = "required" })
                             </div>
                             <div class="form-group col">
                                 @Html.LabelFor(m => m.Category)

@@ -44,13 +44,12 @@ namespace WebApplication.Controllers
             var categories = _accountRepository.GetCategoriesBySessionId(sessionId);
 
             ViewBag.Accounts = checkCompromisedPasswords(accounts).Result;
-            ViewBag.Unattached = unattachedAccounts;
+            ViewBag.Unattached = checkCompromisedPasswords(unattachedAccounts).Result;
             ViewBag.Categories = categories;
 
             return View();
         }
 
-        [HttpGet]
         public async Task<Dictionary<Dbo.Account, string>> checkCompromisedPasswords(List<Dbo.Account> accounts)
         {
             var res = new Dictionary<Dbo.Account, string>();
@@ -211,8 +210,8 @@ namespace WebApplication.Controllers
                 var categories = _accountRepository.GetCategoriesBySessionId(sessionId);
                 var filteredCategories = categories.Where(x => filteredAccounts.Any(y => y.CategoryId == x.Id)).Distinct().ToList();
 
-                ViewBag.Accounts = filteredAccounts;
-                ViewBag.Unattached = unattachedAccounts;
+                ViewBag.Accounts = checkCompromisedPasswords(filteredAccounts).Result;
+                ViewBag.Unattached = checkCompromisedPasswords(unattachedAccounts).Result;
                 ViewBag.Categories = filteredCategories;
             }
             else
@@ -221,8 +220,8 @@ namespace WebApplication.Controllers
                 var categories = _accountRepository.GetCategoriesBySessionId(sessionId);
                 var filteredCategories = categories.Where(x => x.Name.ToLower().Contains(accountViewModel.Search.Value.ToLower())).ToList();
 
-                ViewBag.Accounts = accounts;
-                ViewBag.Unattached = new List<Dbo.Account>();
+                ViewBag.Accounts = checkCompromisedPasswords(accounts).Result;
+                ViewBag.Unattached = new Dictionary<Dbo.Account, string>();
                 ViewBag.Categories = filteredCategories;
             }
 
