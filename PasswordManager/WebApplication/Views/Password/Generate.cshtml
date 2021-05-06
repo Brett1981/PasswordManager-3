@@ -1,0 +1,31 @@
+﻿@model PasswordViewModel
+
+@{
+    ViewBag.Title = "Generate password";
+    Layout = "~/Views/Shared/Navbar.cshtml";
+}
+
+<div>
+    <h1 class="display-4">Generate a password</h1>
+    <div>
+        @using (Html.BeginForm("Generate", "Password", FormMethod.Post))
+        {
+            <div class="form-group">
+                @Html.TextBoxFor(m => m.Password, new { @class = "form-control" })
+                <div class="form-check">
+                    @Html.CheckBoxFor(m => m.Uppercase, new { @class = "form-check-input" })
+                    @Html.LabelFor(m => m.Uppercase)
+                </div>
+                <div class="form-check">
+                    @Html.CheckBoxFor(m => m.Number, new { @class = "form-check-input" })
+                    @Html.LabelFor(m => m.Number)
+                </div>
+                <div class="form-check">
+                    @Html.CheckBoxFor(m => m.Symbol, new { @class = "form-check-input" })
+                    @Html.LabelFor(m => m.Symbol)
+                </div>
+                <input type="submit" value="Generate" class="btn btn-primary" />
+            </div>
+        }
+    </div>
+</div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - WebApplication</title>
+    <title>@ViewData["Title"] - PasswordManager</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/js/bootstrap.js" />
@@ -28,7 +28,7 @@
                             <a class="nav-link active" asp-controller="Bank" asp-action="Banks">Bank</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="#">Generate a password</a>
+                            <a class="nav-link active" asp-controller="Password" asp-action="Generate">Generate a password</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
