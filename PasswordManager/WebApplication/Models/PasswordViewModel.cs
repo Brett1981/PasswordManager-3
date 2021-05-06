@@ -9,6 +9,7 @@ namespace WebApplication.Models
     public class PasswordViewModel
     {
         public string Password { get; set; }
+        public string Length { get; set; }
         [Display(Name = "Allow uppercases")]
         public bool Uppercase { get; set; }
         [Display(Name = "Allow numbers")]

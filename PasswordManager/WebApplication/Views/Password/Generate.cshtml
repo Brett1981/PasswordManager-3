@@ -5,27 +5,53 @@
     Layout = "~/Views/Shared/Navbar.cshtml";
 }
 
+<script>
+    function copyToClipboard() {
+        var password = document.getElementById("password");
+        navigator.clipboard.writeText(password.value)
+    }
+</script>
+
 <div>
     <h1 class="display-4">Generate a password</h1>
     <div>
         @using (Html.BeginForm("Generate", "Password", FormMethod.Post))
         {
-            <div class="form-group">
-                @Html.TextBoxFor(m => m.Password, new { @class = "form-control" })
-                <div class="form-check">
-                    @Html.CheckBoxFor(m => m.Uppercase, new { @class = "form-check-input" })
-                    @Html.LabelFor(m => m.Uppercase)
+        <div class="form-group">
+            <div class="input-group mb-3">
+                @Html.TextBoxFor(m => m.Password, new { @id = "password", @class = "form-control", @disabled = "disabled" })
+                <div class="input-group-append">
+                    <input type="button" class="btn btn-primary" value="Copy" onclick="copyToClipboard()">
                 </div>
-                <div class="form-check">
-                    @Html.CheckBoxFor(m => m.Number, new { @class = "form-check-input" })
-                    @Html.LabelFor(m => m.Number)
-                </div>
-                <div class="form-check">
-                    @Html.CheckBoxFor(m => m.Symbol, new { @class = "form-check-input" })
-                    @Html.LabelFor(m => m.Symbol)
-                </div>
-                <input type="submit" value="Generate" class="btn btn-primary" />
             </div>
+            <div class="row">
+                <div class="form-group col">
+                    @Html.LabelFor(m => m.Length)
+                    @Html.DropDownListFor(m => m.Length, new List<SelectListItem>
+                    {
+                        new SelectListItem { Text = "8", Value = "8" },
+                        new SelectListItem { Text = "12", Value = "12" },
+                        new SelectListItem { Text = "16", Value = "16" },
+                        new SelectListItem { Text = "24", Value = "24" },
+                    }, new { @class = "form-control" })
+                </div>
+                <div class="form-group col">
+                    <div class="form-check">
+                        @Html.CheckBoxFor(m => m.Uppercase, new { @class = "form-check-input" })
+                        @Html.LabelFor(m => m.Uppercase)
+                    </div>
+                    <div class="form-check">
+                        @Html.CheckBoxFor(m => m.Number, new { @class = "form-check-input" })
+                        @Html.LabelFor(m => m.Number)
+                    </div>
+                    <div class="form-check">
+                        @Html.CheckBoxFor(m => m.Symbol, new { @class = "form-check-input" })
+                        @Html.LabelFor(m => m.Symbol)
+                    </div>
+                </div>
+            </div>
+            <input type="submit" value="Generate" class="btn btn-primary" />
+        </div>
         }
     </div>
 </div>

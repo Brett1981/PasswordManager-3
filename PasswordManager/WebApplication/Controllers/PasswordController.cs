@@ -36,9 +36,10 @@ namespace WebApplication.Controllers
                 chars += "~`!@#$%^&*()_-+={[}]|\\:;\"'<,>.?/";
 
             Random random = new Random();
+            var passwordLength = Int32.Parse(passwordViewModel.Length);
             var result = "";
 
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < passwordLength; i++)
             {
                 char c = chars[random.Next(chars.Length)];
                 result += c;
