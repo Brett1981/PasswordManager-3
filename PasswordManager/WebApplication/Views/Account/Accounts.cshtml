@@ -5,6 +5,7 @@
     var accounts = ViewBag.Accounts;
     var unattachedAccounts = ViewBag.Unattached;
     var categories = ViewBag.Categories;
+    var error = ViewBag.error;
     Layout = "~/Views/Shared/Navbar.cshtml";
 }
 
@@ -139,47 +140,16 @@
             <input type="submit" value="Search" class="btn btn-primary search-btn" />
         </div>
     }
-    <div>
-        @foreach (var category in categories)
-        {
-            <table class="table table-hover">
-                <tr class="table-primary">
-                    <th colspan="5">@category.Name</th>
-                </tr>
-                @foreach (var account in accounts)
-                {
-                    @if (account.Key.CategoryId == category.Id)
-                    {
-                        <tr>
-                            <td>@account.Key.Name</td>
-                            <td><a class="copyable" onclick="copyToClipboard('@account.Key.Login')">@account.Key.Login</a></td>
-                            <td><a class="hidetext" onclick="copyToClipboard('@account.Key.Password')">@account.Key.Password</a></td>
-                            <td><a href="@account.Key.Url">@account.Key.Url</a></td>
-                            <td>
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal" onclick="getAccount(@account.Key.Id)">Edit</button>
-                                <button type="button" class="btn btn-primary" onclick="deleteAccount(@account.Key.Id)">Delete</button>
-                                @if (account.Value != "")
-                                {
-                                    <p style="color: red">@account.Value</p>
-                                }
-                            </td>
-                        </tr>
-                    }
-                }
-                <tr>
-                    <td colspan="5">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal" onclick="getCategory(@category.Id)">Add</button>
-                    </td>
-                </tr>
-            </table>
-        }
+<div>
+    @foreach (var category in categories)
+    {
         <table class="table table-hover">
-            @if (unattachedAccounts.Count != 0)
+            <tr class="table-primary">
+                <th colspan="5">@category.Name</th>
+            </tr>
+            @foreach (var account in accounts)
             {
-                <tr class="table-primary">
-                    <th colspan="5">Other accounts</th>
-                </tr>
-                @foreach (var account in unattachedAccounts)
+                @if (account.Key.CategoryId == category.Id)
                 {
                     <tr>
                         <td>@account.Key.Name</td>
@@ -187,7 +157,7 @@
                         <td><a class="hidetext" onclick="copyToClipboard('@account.Key.Password')">@account.Key.Password</a></td>
                         <td><a href="@account.Key.Url">@account.Key.Url</a></td>
                         <td>
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal" data-id="@account.Key.Id" onclick="getAccount(@account.Key.Id)">Edit</button>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal" onclick="getAccount(@account.Key.Id)">Edit</button>
                             <button type="button" class="btn btn-primary" onclick="deleteAccount(@account.Key.Id)">Delete</button>
                             @if (account.Value != "")
                             {
@@ -199,11 +169,43 @@
             }
             <tr>
                 <td colspan="5">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add</button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal" onclick="getCategory(@category.Id)">Add</button>
                 </td>
             </tr>
         </table>
-    </div>
+    }
+    <table class="table table-hover">
+        @if (unattachedAccounts.Count != 0)
+        {
+            <tr class="table-primary">
+                <th colspan="5">Other accounts</th>
+            </tr>
+            @foreach (var account in unattachedAccounts)
+            {
+                <tr>
+                    <td>@account.Key.Name</td>
+                    <td><a class="copyable" onclick="copyToClipboard('@account.Key.Login')">@account.Key.Login</a></td>
+                    <td><a class="hidetext" onclick="copyToClipboard('@account.Key.Password')">@account.Key.Password</a></td>
+                    <td><a href="@account.Key.Url">@account.Key.Url</a></td>
+                    <td>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#updateModal" data-id="@account.Key.Id" onclick="getAccount(@account.Key.Id)">Edit</button>
+                        <button type="button" class="btn btn-primary" onclick="deleteAccount(@account.Key.Id)">Delete</button>
+                        @if (account.Value != "")
+                        {
+                            <p style="color: red">@account.Value</p>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        <tr>
+            <td colspan="5">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add</button>
+            </td>
+        </tr>
+    </table>
+    <p class="text-danger">@error</p>
+</div>
 
     <div id="addModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
