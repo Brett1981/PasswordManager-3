@@ -1,6 +1,6 @@
 # How to Deploy PasswordManager with IIS ?
 
-## Start PasswordManager.sln
+## Start PasswordManager.sln (Start Visual Studio in Administrator mode)
 
 - Right click on WebApplication --> Click Publish
 <img src="screenshots/screenshotsDeploy/Publish.png" height="325">
