@@ -193,7 +193,7 @@ namespace WebApplication.Controllers
             return View();
         }
 
-        public string Encrypt(string text, string encryptionKey)
+        public static string Encrypt(string text, string encryptionKey)
         {
             byte[] bytes = Encoding.Unicode.GetBytes(text);
             using (Aes encryptor = Aes.Create())
@@ -215,7 +215,7 @@ namespace WebApplication.Controllers
             return text;
         }
 
-        public string Decrypt(string encryptedText, string encryptionKey)
+        public static string Decrypt(string encryptedText, string encryptionKey)
         {
             byte[] bytes = Convert.FromBase64String(encryptedText);
             using (Aes encryptor = Aes.Create())

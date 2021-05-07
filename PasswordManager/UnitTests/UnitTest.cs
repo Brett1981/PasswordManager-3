@@ -89,9 +89,12 @@ namespace UnitTests
 
         [Fact]
         [TestMethod]
-        public async Task USER_GET_USER()
+        public async Task USER_INSERT_WITH_HASH_GET_USER()
         {
             var hashPassword = BCrypt.Net.BCrypt.HashPassword("testpassword");
+
+            await Task.Delay(500);
+
             var user = new WebApplication.Dbo.User()
             {
                 Username = "testlogin",
@@ -142,6 +145,51 @@ namespace UnitTests
             Assert.AreEqual(dbAccount.Name, "testname");
             Assert.AreEqual(dbAccount.Login, "testlogin");
             Assert.AreEqual(dbAccount.Password, "testpassword");
+            Assert.AreEqual(dbAccount.Url, "testurl");
+            Assert.AreEqual(dbAccount.SessionId, dbUser.Id);
+            Assert.IsNull(dbAccount.CategoryId);
+
+            await _accountRepository.Delete(dbAccount.Id);
+
+            await _userRepository.Delete(dbUser.Id);
+        }
+
+        [Fact]
+        [TestMethod]
+        public async Task ACCOUNT_INSERT_ENCRPYT_DECRYPT()
+        {
+            var encryptionKey = "CjvAIukcoQVKZaku6rat";
+
+            var user = new WebApplication.Dbo.User()
+            {
+                Username = "testlogin",
+                Password = "testpassword",
+                Email = "test@email.com"
+            };
+
+            await _userRepository.Insert(user);
+            var dbUser = _userRepository.Get().Result.Where(x => x.Username == "testlogin" && x.Password == "testpassword" && x.Email == "test@email.com").FirstOrDefault();
+
+            var account = new WebApplication.Dbo.Account()
+            {
+                Name = "testname",
+                Login = "testlogin",
+                Password = AccountController.Encrypt("testpassword", encryptionKey),
+                Url = "testurl",
+                SessionId = dbUser.Id
+            };
+
+            await _accountRepository.Insert(account);
+
+            var dbAccount = _accountRepository.Get().Result.Where(x => x.Name == "testname" && x.Login == "testlogin" && x.Url == "testurl").FirstOrDefault();
+
+            var decryptedPassword = AccountController.Decrypt(dbAccount.Password, encryptionKey);
+
+            Assert.IsNotNull(dbAccount);
+            Assert.AreEqual(dbAccount.Name, "testname");
+            Assert.AreEqual(dbAccount.Login, "testlogin");
+            Assert.AreNotEqual(dbAccount.Password, "testpassword");
+            Assert.AreEqual(decryptedPassword, "testpassword");
             Assert.AreEqual(dbAccount.Url, "testurl");
             Assert.AreEqual(dbAccount.SessionId, dbUser.Id);
             Assert.IsNull(dbAccount.CategoryId);
@@ -253,6 +301,138 @@ namespace UnitTests
             Assert.IsNotNull(breach);
 
             await _accountRepository.Delete(dbAccount.Id);
+
+            await _userRepository.Delete(dbUser.Id);
+        }
+
+        [Fact]
+        [TestMethod]
+        public async Task ACCOUNT_GET_BY_ID()
+        {
+            var user = new WebApplication.Dbo.User()
+            {
+                Username = "testlogin",
+                Password = "testpassword",
+                Email = "test@email.com"
+            };
+
+            await _userRepository.Insert(user);
+            var dbUser = _userRepository.Get().Result.Where(x => x.Username == "testlogin" && x.Password == "testpassword" && x.Email == "test@email.com").FirstOrDefault();
+
+            var account = new WebApplication.Dbo.Account()
+            {
+                Name = "testname",
+                Login = "testlogin",
+                Password = "testpassword",
+                Url = "testurl",
+                SessionId = dbUser.Id
+            };
+
+            await _accountRepository.Insert(account);
+
+            var dbAccount = _accountRepository.Get().Result.Where(x => x.Name == "testname" && x.Login == "testlogin" && x.Password == "testpassword" && x.Url == "testurl").FirstOrDefault();
+            dbAccount = _accountRepository.GetById(dbAccount.Id);
+
+            Assert.IsNotNull(dbAccount);
+            Assert.AreEqual(dbAccount.Name, "testname");
+            Assert.AreEqual(dbAccount.Login, "testlogin");
+            Assert.AreEqual(dbAccount.Password, "testpassword");
+            Assert.AreEqual(dbAccount.Url, "testurl");
+            Assert.AreEqual(dbAccount.SessionId, dbUser.Id);
+            Assert.IsNull(dbAccount.CategoryId);
+
+            await _accountRepository.Delete(dbAccount.Id);
+
+            await _userRepository.Delete(dbUser.Id);
+        }
+
+        [Fact]
+        [TestMethod]
+        public async Task ACCOUNT_GET_BY_SESSION_ID()
+        {
+            var user = new WebApplication.Dbo.User()
+            {
+                Username = "testlogin",
+                Password = "testpassword",
+                Email = "test@email.com"
+            };
+
+            await _userRepository.Insert(user);
+            var dbUser = _userRepository.Get().Result.Where(x => x.Username == "testlogin" && x.Password == "testpassword" && x.Email == "test@email.com").FirstOrDefault();
+
+            var account = new WebApplication.Dbo.Account()
+            {
+                Name = "testname",
+                Login = "testlogin",
+                Password = "testpassword",
+                Url = "testurl",
+                SessionId = dbUser.Id
+            };
+
+            await _accountRepository.Insert(account);
+
+            var dbAccount = _accountRepository.GetBySessionId(account.SessionId);
+
+            Assert.IsNotNull(dbAccount);
+            Assert.AreEqual(dbAccount.Count, 1);
+            Assert.AreEqual(dbAccount[0].Name, "testname");
+            Assert.AreEqual(dbAccount[0].Login, "testlogin");
+            Assert.AreEqual(dbAccount[0].Password, "testpassword");
+            Assert.AreEqual(dbAccount[0].Url, "testurl");
+            Assert.AreEqual(dbAccount[0].SessionId, dbUser.Id);
+            Assert.IsNull(dbAccount[0].CategoryId);
+
+            await _accountRepository.Delete(dbAccount[0].Id);
+
+            await _userRepository.Delete(dbUser.Id);
+        }
+
+        [Fact]
+        [TestMethod]
+        public async Task ACCOUNT_GET_CATEGORIES_BY_SESSION_ID()
+        {
+            var user = new WebApplication.Dbo.User()
+            {
+                Username = "testlogin",
+                Password = "testpassword",
+                Email = "test@email.com"
+            };
+
+            await _userRepository.Insert(user);
+            var dbUser = _userRepository.Get().Result.Where(x => x.Username == "testlogin" && x.Password == "testpassword" && x.Email == "test@email.com").FirstOrDefault();
+
+            var category = new WebApplication.Dbo.Category()
+            {
+                Name = "testcategory"
+            };
+
+            await _categoryRepository.Insert(category);
+            var dbCategory = _categoryRepository.Get().Result.Where(x => x.Name == "testcategory").FirstOrDefault();
+
+            var account = new WebApplication.Dbo.Account()
+            {
+                Name = "testname",
+                Login = "testlogin",
+                Password = "testpassword",
+                Url = "testurl",
+                SessionId = dbUser.Id,
+                CategoryId = dbCategory.Id
+            };
+
+            await _accountRepository.Insert(account);
+
+            var dbAccount = _accountRepository.Get().Result.Where(x => x.Name == "testname" && x.Login == "testlogin" && x.Password == "testpassword" && x.Url == "testurl").FirstOrDefault();
+
+            var dbCategories = _accountRepository.GetCategoriesBySessionId(dbUser.Id);
+
+            Assert.IsNotNull(dbCategories);
+            Assert.AreEqual(dbCategories.Count, 1);
+            Assert.AreEqual(dbCategories[0].Id, dbCategory.Id);
+            Assert.AreEqual(dbCategories[0].Name, "testcategory");
+
+            await _accountRepository.Delete(dbAccount.Id);
+
+            await _categoryRepository.Delete(dbCategory.Id);
 
             await _userRepository.Delete(dbUser.Id);
         }
