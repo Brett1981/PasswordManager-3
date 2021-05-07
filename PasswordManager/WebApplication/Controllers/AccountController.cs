@@ -46,6 +46,8 @@ namespace WebApplication.Controllers
             ViewBag.Accounts = checkCompromisedPasswords(accounts).Result;
             ViewBag.Unattached = checkCompromisedPasswords(unattachedAccounts).Result;
             ViewBag.Categories = categories;
+            if (TempData["error"] != null)
+                ViewBag.error = TempData["error"].ToString();
 
             return View();
         }
@@ -66,6 +68,19 @@ namespace WebApplication.Controllers
 
             account.SessionId = sessionId;
 
+            TempData["error"] = "";
+            var accounts = _accountRepository.GetBySessionId(sessionId);
+            foreach (var elt in accounts)
+            {
+                if (elt.Login.Equals(account.Login) &&
+                    elt.Password.Equals(account.Password) &&
+                    elt.Url.Equals(account.Url) || elt.Name.Equals(account.Name))
+                {
+                    TempData["error"] = "this account already exist!";
+                    return RedirectToAction("Accounts", "Account");
+                }
+            }
+
             if (!String.IsNullOrEmpty(accountViewModel.Category))
             {
                 var categoryId = _categoryRepository.GetByName(accountViewModel.Category);
@@ -81,6 +96,7 @@ namespace WebApplication.Controllers
                     account.CategoryId = _categoryRepository.GetByName(accountViewModel.Category);
                 }
             }
+           
 
             await _accountRepository.Insert(account);
 
@@ -100,6 +116,19 @@ namespace WebApplication.Controllers
 
             account.SessionId = sessionId;
 
+            TempData["error"] = "";
+            var accounts = _accountRepository.GetBySessionId(sessionId);
+            foreach (var elt in accounts)
+            {
+                if (elt.Login.Equals(account.Login) &&
+                    elt.Password.Equals(account.Password) &&
+                    elt.Url.Equals(account.Url) || elt.Name.Equals(account.Name))
+                {
+                    TempData["error"] = "this account already exist!";
+                    return RedirectToAction("Accounts", "Account");
+                }
+            }
+
             if (!String.IsNullOrEmpty(accountViewModel.Category))
             {
                 var categoryId = _categoryRepository.GetByName(accountViewModel.Category);
@@ -115,6 +144,7 @@ namespace WebApplication.Controllers
                     account.CategoryId = _categoryRepository.GetByName(accountViewModel.Category);
                 }
             }
+
 
             await _accountRepository.Update(account);
 
