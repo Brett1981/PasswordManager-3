@@ -28,7 +28,9 @@ namespace WebApplication.Controllers
             if (id != null)
                 sessionId = (int)id;
             var banks = _bankRepository.GetBySessionId(sessionId);
-            ViewBag.Banks = banks;        
+            ViewBag.Banks = banks;
+            if(TempData["error"] != null)
+                ViewBag.error = TempData["error"].ToString();
             return View();
 
         }
@@ -41,6 +43,20 @@ namespace WebApplication.Controllers
             bank.Cvc = bankViewModel.Cvc;
             bank.Date = bankViewModel.Date;
             bank.SessionId = sessionId;
+            TempData["error"] = "";
+
+            var banks = _bankRepository.GetBySessionId(sessionId);
+            foreach (var elt in banks)
+            {
+                if (elt.Name.Equals(bank.Name) &&
+                    elt.Cvc.Equals(bank.Cvc) &&
+                    elt.Date.Equals(bank.Date) &&
+                    elt.NumberCard.Equals(bank.NumberCard))
+                {
+                    TempData["error"] = "this credit card already exist!";
+                    return RedirectToAction("Banks", "Bank");
+                }
+            }
 
             await _bankRepository.Update(bank);
 
@@ -55,7 +71,20 @@ namespace WebApplication.Controllers
             bank.Date = bankViewModel.Date;
             bank.NumberCard = bankViewModel.NumberCard;
             bank.SessionId = sessionId;
+            TempData["error"] = "";
 
+            var banks = _bankRepository.GetBySessionId(sessionId);
+            foreach(var elt in banks)
+            {
+                if(elt.Name.Equals(bank.Name) &&
+                    elt.Cvc.Equals(bank.Cvc) &&
+                    elt.Date.Equals(bank.Date) &&
+                    elt.NumberCard.Equals(bank.NumberCard))
+                {
+                    TempData["error"] = "this credit card already exist!";
+                    return RedirectToAction("Banks", "Bank");
+                }
+            }
             await _bankRepository.Insert(bank);
 
             return RedirectToAction("Banks", "Bank");
