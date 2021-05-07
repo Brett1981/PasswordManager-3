@@ -256,7 +256,7 @@ namespace WebApplication.Controllers
             accounts.ForEach((e) => {
                 if (e.Url != null)
                 {
-                    var breach = breachList.Find((b) => b.Domain.Length > 0 && e.Url.Contains(b.Domain));
+                    var breach = breachList.Find((b) => b.Domain.Length > 0 && e.Url.Contains(b.Domain) && b.BreachDate > e.CreatedAt);
                     if (breach != null)
                     {
                         var message = "";
