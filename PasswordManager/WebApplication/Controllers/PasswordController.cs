@@ -29,32 +29,66 @@ namespace WebApplication.Controllers
         [HttpPost]
         public ActionResult Generate(PasswordViewModel passwordViewModel)
         {
+            var lowers = "abcdefghijklmnopqrstuvwxyz";
+            var uppers = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            var numerics = "0123456789";
+            var symbols = "~`!@#$%^&*()_-+={[}]|\\:;\"'<,>.?/";
 
-            var chars = "abcdefghijklmnopqrstuvwxyz";
-            
+
+            var chars = lowers;
+
             if (passwordViewModel.Uppercase)
-                chars += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
+                chars += uppers;
             if (passwordViewModel.Number)
-                chars += "0123456789";
-
+                chars += numerics;
             if (passwordViewModel.Symbol)
-                chars += "~`!@#$%^&*()_-+={[}]|\\:;\"'<,>.?/";
+                chars += symbols;
 
             Random random = new Random();
             var passwordLength = Int32.Parse(passwordViewModel.Length);
-            var result = "";
 
-            for (int i = 0; i < passwordLength; i++)
+            var result = Enumerable.Range(0, passwordLength)
+                .Select(_ => chars[random.Next(chars.Length)])
+                .ToArray();
+
+            List<int> excludedIdxs = new List<int>();
+
+            var idx = random.Next(result.Length);
+            result[idx] = lowers[random.Next(lowers.Length)];
+            excludedIdxs.Add(idx);
+
+            if (passwordViewModel.Uppercase)
             {
-                char c = chars[random.Next(chars.Length)];
-                result += c;
+                idx = randomIdxWithExclusion(random, result, excludedIdxs);
+                result[idx] = uppers[random.Next(uppers.Length)];
+                excludedIdxs.Add(idx);
+            }
+            if (passwordViewModel.Number)
+            {
+                idx = randomIdxWithExclusion(random, result, excludedIdxs);
+                result[idx] = numerics[random.Next(numerics.Length)];
+                excludedIdxs.Add(idx);
+            }
+            if (passwordViewModel.Symbol)
+            {
+                idx = randomIdxWithExclusion(random, result, excludedIdxs);
+                result[idx] = symbols[random.Next(symbols.Length)];
             }
 
             ModelState.Clear();
-            passwordViewModel.Password = result;
+            passwordViewModel.Password = new String(result);
 
             return View(passwordViewModel);
+        }
+
+        public int randomIdxWithExclusion(Random random, char[] array, List<int> excludedIdxs)
+        {
+            var randomIdx = random.Next(array.Length);
+
+            while (excludedIdxs.Any(x => x == randomIdx))
+                randomIdx = random.Next(array.Length);
+
+            return randomIdx;
         }
     }
 }
