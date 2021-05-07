@@ -40,7 +40,7 @@ namespace WebApplication
             {
                 options.Cookie.Name = "PasswordManager.Session";
                 options.Cookie.HttpOnly = true;
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.IdleTimeout = TimeSpan.FromMinutes(15);
                 options.Cookie.IsEssential = true;
             });
             services.AddHttpContextAccessor();

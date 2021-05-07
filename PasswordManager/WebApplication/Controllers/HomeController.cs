@@ -35,13 +35,6 @@ namespace WebApplication.Controllers
             return RedirectToAction("Login","User");
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Index(string name, string login, string password)
-        {
-            indexViewModel.AddAccount(name, login, password);
-            return RedirectToAction("Index", "Home");
-        }
-
         public IActionResult Privacy()
         {
 

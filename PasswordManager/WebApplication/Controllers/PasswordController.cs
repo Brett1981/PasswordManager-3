@@ -18,12 +18,18 @@ namespace WebApplication.Controllers
 
         public ActionResult Generate()
         {
+            var session = HttpContext.Session.GetInt32("SessionId");
+            if (session == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
             return View();
         }
 
         [HttpPost]
         public ActionResult Generate(PasswordViewModel passwordViewModel)
         {
+
             var chars = "abcdefghijklmnopqrstuvwxyz";
             
             if (passwordViewModel.Uppercase)

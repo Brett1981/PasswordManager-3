@@ -47,7 +47,6 @@ namespace WebApplication.Controllers
             if (userExist != null)
             {
                 HttpContext.Session.SetInt32("SessionId", userExist.Id);
-
                 HttpContext.Session.SetString("Username", userExist.Username);
 
                 return RedirectToAction("Accounts", "Account");
@@ -65,6 +64,11 @@ namespace WebApplication.Controllers
 
         public IActionResult Register()
         {
+            var session = HttpContext.Session.GetInt32("SessionId");
+            if (session != null)
+            {
+                return RedirectToAction("Accounts", "Account");
+            }
             return View();
         }
 

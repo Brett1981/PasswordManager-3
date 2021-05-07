@@ -24,9 +24,12 @@ namespace WebApplication.Controllers
         
         public ActionResult Banks()
         {
-            var id = HttpContext.Session.GetInt32("SessionId");
-            if (id != null)
-                sessionId = (int)id;
+            var session = HttpContext.Session.GetInt32("SessionId");
+            if (session == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            sessionId = (int)session;
             var banks = _bankRepository.GetBySessionId(sessionId);
             ViewBag.Banks = banks;        
             return View();

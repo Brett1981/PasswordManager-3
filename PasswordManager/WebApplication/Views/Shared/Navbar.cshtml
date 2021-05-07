@@ -30,24 +30,16 @@
                         <li class="nav-item">
                             <a class="nav-link active" asp-controller="Password" asp-action="Generate">Generate a password</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Link
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </li>
 
                     </ul>
 
                     <div class="d-flex">
-
+                        @using Microsoft.AspNetCore.Http
+                        @if (Context.Session.GetString("Username") != null)
+                        {
+                            <h2 style="margin-right:20px">Hey @Context.Session.GetString("Username") ! </h2>
+                        }
                         <button class="btn btn-outline-danger" type="button" onclick="location.href='@Url.Action("Deconnexion", "User")'"> Log out </button>
-
                     </div>
                 </div>
             </div>
@@ -62,7 +54,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2021 - WebApplication - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2021 - Password Manager | arnaud.lassartesse - goh-kenedja.coulibaly - antoine.claudel - kenz.narainen 
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

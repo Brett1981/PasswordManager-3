@@ -26,9 +26,12 @@ namespace WebApplication.Controllers
 
         public ActionResult Accounts()
         {
-            var id = HttpContext.Session.GetInt32("SessionId");
-            if (id != null)
-                sessionId = (int)id;
+            var session = HttpContext.Session.GetInt32("SessionId");
+            if (session == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
+            sessionId = (int)session;
             var accounts = _accountRepository.GetBySessionId(sessionId);
             var unattachedAccounts = accounts.Where(x => x.CategoryId == null).ToList();
             var categories = _accountRepository.GetCategoriesBySessionId(sessionId);
