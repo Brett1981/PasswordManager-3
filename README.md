@@ -3,10 +3,10 @@
 ## Start PasswordManager.sln
 
 - Right click on WebApplication --> Click Publish
-<img src="screenshots/Publish.png" height="325">
+<img src="screenshots/screenshotsDeploy/Publish.png" height="325">
 
 - Click on Publish to deploy solution in local
-<img src="screenshots/Deploy Solution.png" height="325">
+<img src="screenshots/screenshotsDeploy/Deploy Solution.png" height="325">
 
 
 
