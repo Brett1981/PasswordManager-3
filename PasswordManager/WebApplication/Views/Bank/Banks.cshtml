@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Banks";
     var banks = ViewBag.Banks;
+    var error = ViewBag.error;
     Layout = "~/Views/Shared/Navbar.cshtml";
 }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -22,6 +23,7 @@
             });
         }
     }
+
 
     function getBank(itemId) {
         $.ajax({
@@ -51,9 +53,16 @@
 <div>
     <h1 class="display-4">Banks</h1>
     <div>
-        <table class="table table-hover table-primary">
-            <tr>
+        <p>@error</p>
+        <table class="table table-hover">
+            <tr class="table-primary">
                 <th colspan="5">All credit cards</th>
+            </tr>
+            <tr>
+                <td>Card Number:</td>
+                <td>Name:</td>
+                <td>Date:</td>
+                <td>Cvc:</td>
             </tr>
             @foreach (var bank in banks)
             {
@@ -72,6 +81,7 @@
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add credit card</button>
             </td>
         </table>
+        <p class="text-danger">@error</p>
     </div>
 
     <div id="addModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
