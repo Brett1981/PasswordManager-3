@@ -18,6 +18,11 @@ namespace WebApplication.Controllers
 
         public ActionResult Generate()
         {
+            var session = HttpContext.Session.GetInt32("SessionId");
+            if (session == null)
+            {
+                return RedirectToAction("Login", "User");
+            }
             return View();
         }
 
@@ -28,6 +33,7 @@ namespace WebApplication.Controllers
             var uppers = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             var numerics = "0123456789";
             var symbols = "~`!@#$%^&*()_-+={[}]|\\:;\"'<,>.?/";
+
 
             var chars = lowers;
 
