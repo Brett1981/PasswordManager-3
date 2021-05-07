@@ -19,7 +19,6 @@ namespace WebApplication.Models
         [Required(ErrorMessage = "Password is required")]
         public string password { get; set; }
 
-        [StringLength(30, ErrorMessage = "Password can be no larger than 30 characters")]
         public string confirmpassword { get; set; }
     }
 }

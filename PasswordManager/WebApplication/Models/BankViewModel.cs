@@ -10,9 +10,12 @@ namespace WebApplication.Models
     {
         public int Id { get; set; }
         [Display(Name = "Card number")]
+        [StringLength(16)]
         public string NumberCard { get; set; }
         public string Name { get; set; }
+        [StringLength(5)]
         public string Date { get; set; }
+        [StringLength(3)]
         public string Cvc { get; set; }
     }
 }
