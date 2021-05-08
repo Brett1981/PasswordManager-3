@@ -34,7 +34,6 @@ namespace WebApplication.Controllers
             var numerics = "0123456789";
             var symbols = "~`!@#$%^&*()_-+={[}]|\\:;\"'<,>.?/";
 
-
             var chars = lowers;
 
             if (passwordViewModel.Uppercase)

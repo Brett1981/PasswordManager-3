@@ -223,7 +223,7 @@ namespace WebApplication.Controllers
             return View();
         }
 
-        public string Encrypt(string text, string encryptionKey)
+        public static string Encrypt(string text, string encryptionKey)
         {
             byte[] bytes = Encoding.Unicode.GetBytes(text);
             using (Aes encryptor = Aes.Create())
@@ -245,7 +245,7 @@ namespace WebApplication.Controllers
             return text;
         }
 
-        public string Decrypt(string encryptedText, string encryptionKey)
+        public static string Decrypt(string encryptedText, string encryptionKey)
         {
             byte[] bytes = Convert.FromBase64String(encryptedText);
             using (Aes encryptor = Aes.Create())
@@ -286,7 +286,7 @@ namespace WebApplication.Controllers
             accounts.ForEach((e) => {
                 if (e.Url != null)
                 {
-                    var breach = breachList.Find((b) => b.Domain.Length > 0 && e.Url.Contains(b.Domain));
+                    var breach = breachList.Find((b) => b.Domain.Length > 0 && e.Url.Contains(b.Domain) && b.BreachDate > e.CreatedAt);
                     if (breach != null)
                     {
                         var message = "";
