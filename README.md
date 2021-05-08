@@ -13,4 +13,6 @@
 
 * If you have an error install [.NET Core Hosting Bundle](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/iis/?view=aspnetcore-3.1#install-the-net-core-hosting-bundle)
 
+* Solution also Deploy on Azure : https://passwordmanagerepita.azurewebsites.net/
 * Link to the GitHub : https://github.com/7Kenz/PasswordManager/
+
