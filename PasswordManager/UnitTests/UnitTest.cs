@@ -576,8 +576,6 @@ namespace UnitTests
             Assert.AreEqual(dbBank.Date, "testdateupdated");
             Assert.AreEqual(dbBank.SessionId, dbUser.Id);
 
-            await _bankRepository.Insert(bank);
-
             await _bankRepository.Delete(dbBank.Id);
 
             await _userRepository.Delete(dbUser.Id);
