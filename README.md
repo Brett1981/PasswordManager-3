@@ -11,4 +11,4 @@
 
 
 
-* If you have an error install .NET Hosting Bundle
+* If you have an error install [.NET Hosting Bundle](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/iis/?view=aspnetcore-3.1#install-the-net-core-hosting-bundle)
