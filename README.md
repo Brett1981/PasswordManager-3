@@ -2,6 +2,7 @@
 
 ## Start PasswordManager.sln (Start Visual Studio in Administrator mode)
 
+- Open PasswordManager/PasswordManager.sln
 - Right click on WebApplication --> Click Publish
 <img src="screenshots/screenshotsDeploy/Publish.png" height="325" alt="deployPublish">
 
