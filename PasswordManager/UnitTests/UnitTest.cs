@@ -156,6 +156,58 @@ namespace UnitTests
 
         [Fact]
         [TestMethod]
+        public async Task ACCOUNT_UPDATE()
+        {
+            var user = new WebApplication.Dbo.User()
+            {
+                Username = "testlogin",
+                Password = "testpassword",
+                Email = "test@email.com"
+            };
+
+            await _userRepository.Insert(user);
+            var dbUser = _userRepository.Get().Result.Where(x => x.Username == "testlogin" && x.Password == "testpassword" && x.Email == "test@email.com").FirstOrDefault();
+
+            var account = new WebApplication.Dbo.Account()
+            {
+                Name = "testname",
+                Login = "testlogin",
+                Password = "testpassword",
+                Url = "testurl",
+                SessionId = dbUser.Id
+            };
+
+            await _accountRepository.Insert(account);
+            var dbAccount = _accountRepository.Get().Result.Where(x => x.Name == "testname" && x.Login == "testlogin" && x.Password == "testpassword" && x.Url == "testurl").FirstOrDefault();
+
+            var accountUpdated = new WebApplication.Dbo.Account()
+            {
+                Id = dbAccount.Id,
+                Name = "testnameupdated",
+                Login = "testloginupdated",
+                Password = "testpasswordupdated",
+                Url = "testurlupdated",
+                SessionId = dbUser.Id
+            };
+
+            await _accountRepository.Update(accountUpdated);
+
+            dbAccount = _accountRepository.Get().Result.Where(x => x.Name == "testnameupdated" && x.Login == "testloginupdated" && x.Password == "testpasswordupdated" && x.Url == "testurlupdated").FirstOrDefault();
+
+            Assert.IsNotNull(dbAccount);
+            Assert.AreEqual(dbAccount.Name, "testnameupdated");
+            Assert.AreEqual(dbAccount.Login, "testloginupdated");
+            Assert.AreEqual(dbAccount.Password, "testpasswordupdated");
+            Assert.AreEqual(dbAccount.Url, "testurlupdated");
+            Assert.AreEqual(dbAccount.SessionId, dbUser.Id);
+
+            await _accountRepository.Delete(dbAccount.Id);
+
+            await _userRepository.Delete(dbUser.Id);
+        }
+
+        [Fact]
+        [TestMethod]
         public async Task ACCOUNT_INSERT_ENCRPYT_DECRYPT()
         {
             var encryptionKey = "CjvAIukcoQVKZaku6rat";
@@ -470,6 +522,61 @@ namespace UnitTests
             Assert.AreEqual(dbBank.Cvc, "testcvc");
             Assert.AreEqual(dbBank.Date, "testdate");
             Assert.AreEqual(dbBank.SessionId, dbUser.Id);
+
+            await _bankRepository.Delete(dbBank.Id);
+
+            await _userRepository.Delete(dbUser.Id);
+        }
+
+        [Fact]
+        [TestMethod]
+        public async Task BANK_UPDATE()
+        {
+            var user = new WebApplication.Dbo.User()
+            {
+                Username = "testlogin",
+                Password = "testpassword",
+                Email = "test@email.com"
+            };
+
+            await _userRepository.Insert(user);
+            var dbUser = _userRepository.Get().Result.Where(x => x.Username == "testlogin" && x.Password == "testpassword" && x.Email == "test@email.com").FirstOrDefault();
+
+            var bank = new WebApplication.Dbo.Bank()
+            {
+                NumberCard = "testnumber",
+                Name = "testname",
+                Cvc = "testcvc",
+                Date = "testdate",
+                SessionId = dbUser.Id
+            };
+
+            await _bankRepository.Insert(bank);
+
+            var dbBank = _bankRepository.Get().Result.Where(x => x.NumberCard == "testnumber" && x.Name == "testname" && x.Cvc == "testcvc" && x.Date == "testdate").FirstOrDefault();
+
+            var bankUpdated = new WebApplication.Dbo.Bank()
+            {
+                Id = dbBank.Id,
+                NumberCard = "testnumberupdated",
+                Name = "testnameupdated",
+                Cvc = "testcvcupdated",
+                Date = "testdateupdated",
+                SessionId = dbUser.Id
+            };
+
+            await _bankRepository.Update(bankUpdated);
+
+            dbBank = _bankRepository.Get().Result.Where(x => x.NumberCard == "testnumberupdated" && x.Name == "testnameupdated" && x.Cvc == "testcvcupdated" && x.Date == "testdateupdated").FirstOrDefault();
+
+            Assert.IsNotNull(dbBank);
+            Assert.AreEqual(dbBank.NumberCard, "testnumberupdated");
+            Assert.AreEqual(dbBank.Name, "testnameupdated");
+            Assert.AreEqual(dbBank.Cvc, "testcvcupdated");
+            Assert.AreEqual(dbBank.Date, "testdateupdated");
+            Assert.AreEqual(dbBank.SessionId, dbUser.Id);
+
+            await _bankRepository.Insert(bank);
 
             await _bankRepository.Delete(dbBank.Id);
 
